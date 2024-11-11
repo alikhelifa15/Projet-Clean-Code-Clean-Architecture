@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "packages": [
+    "domain",
+    "application",
+    "infrastructure",
+    "infrastructure/frameworks/react-app"
+  ]
+}

@@ -1,18 +1,91 @@
-version: '3.8'
-
 services:
-  react-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  rest_api:
+    image: node:23
+    container_name: rest_api
+    working_dir: /usr/src/app
     ports:
-      - "5173:5173"
-    volumes:
-      - ./Client:/app
-      - /app/node_modules 
+      - "3000:3000"
     environment:
       - NODE_ENV=development
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=triumphMotorcyclesDb
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+    volumes:
+      - .:/usr/src/app
+    command: sh -c "cd infrastructure/frameworks/express && yarn install && yarn start"
+    depends_on:
+      - mysql
+      - mongodb
+
+  graphql_api:
+    image: node:23
+    container_name: graphql_api
+    working_dir: /usr/src/app
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=triumphMotorcyclesDb
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+    volumes:
+      - .:/usr/src/app
+    command: sh -c "cd infrastructure/frameworks/fastify && yarn install && yarn start"
+    depends_on:
+      - mysql
+      - mongodb
+
+  # Service MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # Service MySQL
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: triumphMotorcyclesDb
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # Service phpMyAdmin (Version 3.8)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    depends_on:
+      - mysql
+
+  # Service pour l'application front-end React
+  frontend:
+    image: node:18
+    container_name: frontend
+    working_dir: /app
+    ports:
+      - "3001:5173"
+    depends_on:
+      - rest_api
+      - graphql_api
+    volumes:
+      - ./infrastructure/frameworks/react-app:/app
+    command: sh -c "yarn install && yarn dev --host"
 
 volumes:
-  node_modules: 
-
+  mongo_data:
+  mysql_data:

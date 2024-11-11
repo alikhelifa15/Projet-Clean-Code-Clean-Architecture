@@ -1,0 +1,6 @@
+{
+    "private": true,
+    "name": "@triumphmotorcycles/application",
+    "version": "0.1.0",
+    "description": "Application for motorcycle management"
+}
