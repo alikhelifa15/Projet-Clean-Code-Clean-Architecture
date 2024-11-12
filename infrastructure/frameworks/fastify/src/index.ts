@@ -1,17 +1,14 @@
 import Fastify from 'fastify';
 import mercurius from 'mercurius';
-
-// Créer un serveur Fastify
+import '../../../database/mongodb/models/index'
 const fastify = Fastify();
 
-// Définir un schéma GraphQL
 const schema = `
   type Query {
     hello: String
   }
 `;
 
-// Définir les résolveurs pour le schéma
 const resolvers = {
   Query: {
     hello: async () => {
@@ -20,11 +17,10 @@ const resolvers = {
   },
 };
 
-// Ajouter le plugin Mercurius à Fastify
 fastify.register(mercurius, {
   schema,
   resolvers,
-  graphiql: true, // Activer l'interface GraphiQL
+  graphiql: true, 
 });
 
 // Démarrer le serveur

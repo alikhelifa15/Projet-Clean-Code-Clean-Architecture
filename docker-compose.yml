@@ -1,4 +1,35 @@
+version: '3.8'
+
 services:
+
+  # Service MongoDB
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: triumphMotorcyclesDb
+    networks:
+      - app-network
+
+  # Service MySQL
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: triumphMotorcyclesDb
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  # Service REST API (connecté à MySQL)
   rest_api:
     image: node:23
     container_name: rest_api
@@ -17,8 +48,11 @@ services:
     command: sh -c "cd infrastructure/frameworks/express && yarn install && yarn start"
     depends_on:
       - mysql
-      - mongodb
+    restart: on-failure
+    networks:
+      - app-network
 
+  # Service GraphQL API (connecté à MongoDB)
   graphql_api:
     image: node:23
     container_name: graphql_api
@@ -26,41 +60,19 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - NODE_ENV=development
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_NAME=triumphMotorcyclesDb
-      - DB_USER=root
-      - DB_PASSWORD=rootpassword
+      - HOST=0.0.0.0
+      - MONGO_URL=mongodb://root:example@mongodb:27017/triumphMotorcyclesDb?authSource=admin
     volumes:
       - .:/usr/src/app
     command: sh -c "cd infrastructure/frameworks/fastify && yarn install && yarn start"
     depends_on:
-      - mysql
       - mongodb
+    restart: on-failure
+    networks:
+      - app-network
 
-  # Service MongoDB
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
 
-  # Service MySQL
-  mysql:
-    image: mysql:latest
-    container_name: mysql
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: triumphMotorcyclesDb
-    volumes:
-      - mysql_data:/var/lib/mysql
-
-  # Service phpMyAdmin (Version 3.8)
+  # Service PhpMyAdmin (pour gérer MySQL)
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
@@ -71,6 +83,8 @@ services:
       PMA_PORT: 3306
     depends_on:
       - mysql
+    networks:
+      - app-network
 
   # Service pour l'application front-end React
   frontend:
@@ -85,7 +99,14 @@ services:
     volumes:
       - ./infrastructure/frameworks/react-app:/app
     command: sh -c "yarn install && yarn dev --host"
+    networks:
+      - app-network
+    restart: unless-stopped
 
 volumes:
   mongo_data:
   mysql_data:
+
+networks:
+  app-network:
+    driver: bridge

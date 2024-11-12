@@ -1,10 +1,9 @@
 import mongoose from 'mongoose';
 import fs from 'fs';
 import path from 'path';
-
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://localhost:27017/triumphMotorcyclesDb');
+    await mongoose.connect('mongodb://root:example@mongodb:27017/triumphMotorcyclesDb?authSource=admin');
     console.log('MongoDB connecté');
   } catch (err) {
     console.error('Erreur de connexion à MongoDB:', err);

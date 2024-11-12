@@ -1,20 +1,17 @@
 {
-    "compilerOptions": {
-      "target": "ES6", 
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "module": "commonjs",
-      "typeRoots": ["@types", "node_modules/@types"],
-      "moduleResolution": "node",
-      "resolveJsonModule": true, 
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true,
-      "types": ["node"]
-    },
-    "include": [
-      "models/**/*.ts",
-    ]
-  }
-  
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "typeRoots": ["@types", "node_modules/@types"],
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
+  },
+  "include": ["models/**/*.ts", "src/**/*.ts"]
+}
