@@ -1,8 +1,9 @@
-import { Table, Column, Model, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import { PartnerCompany } from './PartnerCompany';
+import { Test } from './Test';
 
-@Table({ tableName: 'user' })
-export class User extends Model {
+@Table({ tableName: 'drivers' })
+export class Driver extends Model {
   @Column
   firstName!: string;
 
@@ -10,13 +11,13 @@ export class User extends Model {
   lastName!: string;
 
   @Column({ unique: true })
-  email!: string;
+  licenseNumber!: string;
 
   @Column
-  password!: string;
+  licenseDate!: Date;
 
   @Column
-  role!: string; // admin, employee, manager, etc.
+  experience!: number;
 
   @Column
   status!: string; // active, inactive, suspended
@@ -28,8 +29,8 @@ export class User extends Model {
   @BelongsTo(() => PartnerCompany)
   company!: PartnerCompany;
 
-  validatePassword(password: string): boolean {
-    return this.password === password;
-  }
+  @HasMany(() => Test)
+  tests!: Test[];
 }
-export default User;
+
+export default Driver;

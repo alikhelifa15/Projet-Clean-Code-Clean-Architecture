@@ -4,12 +4,14 @@ import path from "path";
 import fs from "fs";
 import mysql from "mysql2";
 import "reflect-metadata";
+import { seedDatabase } from "../seedData"; // Assurez-vous que ce fichier existe et contient les données de seed
 
 const modelsDirectory = path.join(__dirname); 
 const models = fs.readdirSync(modelsDirectory)
   .filter(file => file.endsWith('.ts') || file.endsWith('.js'))
   .map(file => require(path.join(modelsDirectory, file)).default)
   .filter(model => model !== null && model !== undefined);
+
 console.log('models:', models);
 
 const dbConfig = config.getDatabaseSequilizeConfig();
@@ -36,13 +38,15 @@ connection.query(`CREATE DATABASE IF NOT EXISTS ${dbConfig.database}`, (err) => 
     sequelize.authenticate()
       .then(() => {
         console.log('Connection to the database has been established successfully.');
+        return sequelize.sync({ force: true }); // Synchronise les modèles avec la base
       })
-      .catch(err => {
-        console.error('Unable to connect to the database:', err);
+      .then(async () => {
+        console.log('Database synchronized (force mode).');
+        await seedDatabase(); // Appelle la fonction de seed pour insérer les données
+        console.log('Database seeded successfully.');
+      })
+      .catch((error) => {
+        console.error('Unable to connect to the database or synchronize:', error);
       });
-
-    sequelize.sync({ force: true })
-      .then(() => console.log('Database synchronized (force mode)'))
-      .catch((error) => console.error('Error synchronizing the database:', error));
   }
 });
