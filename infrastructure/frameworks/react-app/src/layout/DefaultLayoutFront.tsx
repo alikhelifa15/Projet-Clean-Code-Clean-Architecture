@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({
+const DefaultLayoutFront: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
@@ -23,4 +23,4 @@ const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({
     </div>
   );
 };
-export default DefaultLayout;
+export default DefaultLayoutFront;

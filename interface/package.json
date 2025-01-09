@@ -1,0 +1,12 @@
+{
+    "private": true,
+    "name": "@triumphmotorcycles/interface",
+    "version": "0.1.0",
+    "description": "Application for motorcycle management",
+    "dependencies": {
+        "express": "^4.21.1"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.0"
+    }
+}

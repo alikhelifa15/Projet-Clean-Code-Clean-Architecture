@@ -1,6 +1,6 @@
 import { Table, Column, Model, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { PartOrder } from './PartOrder';
-import { Part } from './Part';
+import  PartOrder  from './PartOrder';
+import  Part  from './Part';
 
 @Table({ tableName: 'order_details' })
 export class OrderDetail extends Model {

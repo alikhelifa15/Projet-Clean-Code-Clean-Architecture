@@ -5,6 +5,7 @@ services:
   # Service MongoDB
   mongodb:
     image: mongo
+    container_name: mongodb
     restart: always
     ports:
       - 27017:27017
@@ -28,6 +29,7 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - app-network
+      
 
   # Service REST API (connecté à MySQL)
   rest_api:
@@ -44,13 +46,18 @@ services:
       - DB_USER=root
       - DB_PASSWORD=rootpassword
     volumes:
-      - .:/usr/src/app
-    command: sh -c "cd infrastructure/frameworks/express && yarn install && yarn start"
+      - .:/usr/src/app:delegated
+      - /usr/src/app/node_modules
+    command: sh -c "yarn global add wait-port && wait-port mysql:3306 --timeout=300000 && cd infrastructure/frameworks/express && yarn install && yarn dev"
     depends_on:
       - mysql
     restart: on-failure
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      timeout: 20s
+      retries: 10
 
   # Service GraphQL API (connecté à MongoDB)
   graphql_api:
@@ -63,14 +70,15 @@ services:
       - HOST=0.0.0.0
       - MONGO_URL=mongodb://root:example@mongodb:27017/triumphMotorcyclesDb?authSource=admin
     volumes:
-      - .:/usr/src/app
+      - .:/usr/src/app:delegated
+      - /usr/src/app/node_modules
     command: sh -c "cd infrastructure/frameworks/fastify && yarn install && yarn start"
     depends_on:
       - mongodb
+      - mysql
     restart: on-failure
     networks:
       - app-network
-
 
   # Service PhpMyAdmin (pour gérer MySQL)
   phpmyadmin:
@@ -97,7 +105,14 @@ services:
       - rest_api
       - graphql_api
     volumes:
-      - ./infrastructure/frameworks/react-app:/app
+      - ./infrastructure/frameworks/react-app:/app:delegated
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - WDS_SOCKET_HOST=127.0.0.1
+      - WATCHPACK_POLLING_INTERVAL=1000
+      - FAST_REFRESH=true
     command: sh -c "yarn install && yarn dev --host"
     networks:
       - app-network

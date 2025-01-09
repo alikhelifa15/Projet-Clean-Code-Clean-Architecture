@@ -4,14 +4,16 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "build": "tsc"
+    "dev": "nodemon --ext ts,js,json --watch . --exec ts-node src/index.ts",
+   "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "nodemon": "^3.1.7"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",

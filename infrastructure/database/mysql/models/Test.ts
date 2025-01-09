@@ -1,36 +1,50 @@
-import { Table, Column, Model, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { Motorcycle } from './Motorcycle';
-import { Driver } from './Driver';
+import { Column, Model, Table, ForeignKey, DataType } from 'sequelize-typescript';
+import Motorcycle from './Motorcycle';  
+import Driver from './Driver'; 
 
-@Table({ tableName: 'tests' })
-export class Test extends Model {
+@Table({
+  tableName: 'test',
+  timestamps: false,
+})
+export default class Test extends Model<Test> {
   @ForeignKey(() => Motorcycle)
-  @Column
-  motorcycleId!: number;
-
-  @BelongsTo(() => Motorcycle)
-  motorcycle!: Motorcycle;
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  motorcycle_id!: number;
 
   @ForeignKey(() => Driver)
-  @Column
-  driverId!: number;
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  driver_id!: number;
 
-  @BelongsTo(() => Driver)
-  driver!: Driver;
+  @Column({
+    type: DataType.DATE,
+    allowNull: false,
+  })
+  start_date!: Date;
 
-  @Column
-  startDate!: Date;
+  @Column({
+    type: DataType.DATE,
+  })
+  end_date?: Date;
 
-  @Column
-  endDate!: Date;
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  starting_mileage!: number;
 
-  @Column
-  initialMileage!: number;
+  @Column({
+    type: DataType.INTEGER,
+  })
+  ending_mileage?: number;
 
-  @Column
-  finalMileage!: number;
-
-  @Column
-  comments!: string;
+  @Column({
+    type: DataType.TEXT,
+  })
+  comments?: string;
 }
-export default Test;

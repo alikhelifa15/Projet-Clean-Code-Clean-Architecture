@@ -1,40 +1,61 @@
-import { Table, Column, Model, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
-import { PartnerCompany } from './PartnerCompany';
-import { Maintenance } from './Maintenance';
-import { Test } from './Test';
+import { Column, ForeignKey, Model, Table, DataType } from 'sequelize-typescript';
+import  Company  from './Company'; 
+import  MotorcycleModel  from './MotorcycleModel'; 
 
+@Table({
+  tableName: 'motorcycle',
+  timestamps: false,
+})
+export default class Motorcycle extends Model<Motorcycle> {
+  @Column({
+    type: DataType.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  })
+  id!: number;
 
-@Table({ tableName: 'motorcycles' })
-export class Motorcycle extends Model {
-  @Column({ unique: true })
-  serialNumber!: string;
+  @ForeignKey(() => Company)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true, 
+  })
+  company_id!: number | null;
 
-  @Column
-  model!: string;
+  @ForeignKey(() => MotorcycleModel)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true, 
+  })
+  model_id!: number | null;
 
-  @Column
-  licensePlate!: string;
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+    unique: true,
+  })
+  serial_number!: string;
 
-  @Column
+  @Column({
+    type: DataType.INTEGER,
+    defaultValue: 0,
+  })
   mileage!: number;
 
-  @Column
-  serviceStartDate!: Date;
+  @Column({
+    type: DataType.DATE,
+    allowNull: true,
+  })
+  service_date!: Date | null;
 
-  @Column
-  status!: string; // active, maintenance, out of service
+  @Column({
+    type: DataType.STRING(20),
+    allowNull: false,
+  })
+  status!: string;
 
-  @ForeignKey(() => PartnerCompany)
-  @Column
-  companyId!: number;
-
-  @BelongsTo(() => PartnerCompany)
-  company!: PartnerCompany;
-
-  @HasMany(() => Maintenance)
-  maintenances!: Maintenance[];
-
-  @HasMany(() => Test)
-  tests!: Test[];
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  maintenance_interval!: number;
 }
-export default Motorcycle;

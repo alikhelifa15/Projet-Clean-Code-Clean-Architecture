@@ -1,35 +1,119 @@
-import { Table, Column, Model, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { PartnerCompany } from './PartnerCompany';
+import {
+  Column,
+  Model,
+  Table,
+  DataType,
+  AfterSave,
+  AfterDestroy,
+  AfterUpdate,
+} from "sequelize-typescript";
+import UserMongo from "../../mongodb/models/user";
+import mongoose from "mongoose";
 
-@Table({ tableName: 'user' })
-export class User extends Model {
-  @Column
-  firstName!: string;
+const MONGO_URI = 'mongodb://root:example@mongodb:27017/triumphMotorcyclesDb?authSource=admin';
+const MONGO_OPTIONS = {
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  connectTimeoutMS: 10000,
+  retryWrites: true,
+};
 
-  @Column
-  lastName!: string;
+async function ensureMongoConnection() {
+  if (mongoose.connection.readyState !== 1) {
+    try {
+      await mongoose.connect(MONGO_URI, MONGO_OPTIONS);
+    } catch (error) {
+      console.error('Erreur de connexion MongoDB:', error);
+      throw new Error('Impossible de se connecter à MongoDB');
+    }
+  }
+  return mongoose.connection;
+}
 
-  @Column({ unique: true })
+@Table({
+  tableName: "user",
+  timestamps: false,
+})
+export default class User extends Model<User> {
+  @Column({
+    type: DataType.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  })
+  id!: number;
+
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+    unique: true,
+  })
   email!: string;
 
-  @Column
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+  })
   password!: string;
 
-  @Column
-  role!: string; // admin, employee, manager, etc.
+  @Column({
+    type: DataType.STRING(20),
+    allowNull: false,
+  })
+  type!: string;
 
-  @Column
-  status!: string; // active, inactive, suspended
+  @Column({
+    type: DataType.DATE,
+    defaultValue: DataType.NOW,
+  })
+  creationDate!: Date;
 
-  @ForeignKey(() => PartnerCompany)
-  @Column
-  companyId!: number;
+  @AfterSave
+  static async saveToMongo(user: User) {
+    try {
+      await ensureMongoConnection();
+      
+      const newUser = new UserMongo({
+        email: user.email,
+        password: user.password,
+        type: user.type,
+        creationDate: user.creationDate,
+      });
 
-  @BelongsTo(() => PartnerCompany)
-  company!: PartnerCompany;
+      await newUser.save();
+      console.log('Utilisateur enregistré dans MongoDB avec succès !');
+    } catch (err) {
+      console.error("Erreur lors de l'enregistrement dans MongoDB :", err);
+     
+    }
+  }
+  
+  @AfterDestroy
+  static async deleteFromMongo(user: User) {
+    try {
+      await ensureMongoConnection();
+      await UserMongo.deleteOne({ email: user.email });
+      console.log('Utilisateur supprimé de MongoDB avec succès !');
+    } catch (err) {
+      console.error("Erreur lors de la suppression dans MongoDB :", err);
+    }
+  }
 
-  validatePassword(password: string): boolean {
-    return this.password === password;
+  @AfterUpdate
+  static async updateMongo(user: User) {
+    try {
+      await ensureMongoConnection();
+      await UserMongo.updateOne(
+        { email: user.email },
+        {
+          email: user.email,
+          password: user.password,
+          type: user.type,
+          creationDate: user.creationDate,
+        }
+      );
+      console.log('Utilisateur mis à jour dans MongoDB avec succès !');
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour dans MongoDB :", err);
+    }
   }
 }
-export default User;

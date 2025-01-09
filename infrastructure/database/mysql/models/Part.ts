@@ -1,28 +1,51 @@
-import { Table, Column, Model, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { PartnerCompany } from './PartnerCompany';
+import { Column, Model, Table, DataType } from 'sequelize-typescript';
 
-@Table({ tableName: 'parts' })
-export class Part extends Model {
-  @Column({ unique: true })
+@Table({
+  tableName: 'part',
+  timestamps: false,
+})
+export default class Part extends Model<Part> {
+  @Column({
+    type: DataType.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  })
+  id!: number;
+
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+    unique: true,
+  })
   reference!: string;
 
-  @Column
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+  })
   name!: string;
 
-  @Column
-  currentStock!: number;
+  @Column({
+    type: DataType.TEXT,
+    allowNull: true, 
+  })
+  description!: string | null;
 
-  @Column
-  stockAlertLevel!: number;
+  @Column({
+    type: DataType.INTEGER,
+    defaultValue: 0,
+  })
+  current_stock!: number;
 
-  @Column
-  unitPrice!: number;
+  @Column({
+    type: DataType.INTEGER,
+    defaultValue: 10,
+  })
+  alert_threshold!: number;
 
-  @ForeignKey(() => PartnerCompany)
-  @Column
-  companyId!: number;
-
-  @BelongsTo(() => PartnerCompany)
-  company!: PartnerCompany;
+  @Column({
+    type: DataType.DECIMAL(10, 2),
+    allowNull: true, // Le prix unitaire est optionnel
+  })
+  unit_price!: number | null;
 }
-export default Part;

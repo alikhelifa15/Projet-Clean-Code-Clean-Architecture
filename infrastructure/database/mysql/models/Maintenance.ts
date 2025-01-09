@@ -1,35 +1,58 @@
-import { Table, Column, Model, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
-import { Motorcycle } from './Motorcycle';
-import { UsedPart } from './UsedPart';
+import { Column, ForeignKey, Model, Table, DataType } from 'sequelize-typescript';
+import  Motorcycle  from './Motorcycle'; 
 
-@Table({ tableName: 'maintenances' })
-export class Maintenance extends Model {
+@Table({
+  tableName: 'maintenance',
+  timestamps: false,
+})
+export default class Maintenance extends Model<Maintenance> {
+  @Column({
+    type: DataType.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  })
+  id!: number;
+
   @ForeignKey(() => Motorcycle)
-  @Column
-  motorcycleId!: number;
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false, // Assurez-vous que la clé étrangère est obligatoire si nécessaire
+  })
+  motorcycle_id!: number;
 
-  @BelongsTo(() => Motorcycle)
-  motorcycle!: Motorcycle;
+  @Column({
+    type: DataType.DATE,
+    allowNull: false,
+  })
+  maintenance_date!: Date;
 
-  @Column
-  maintenanceDate!: Date;
+  @Column({
+    type: DataType.STRING(20),
+    allowNull: false,
+  })
+  type!: string;
 
-  @Column
-  type!: string; // preventive, corrective
+  @Column({
+    type: DataType.TEXT,
+    allowNull: true, // Description est optionnelle
+  })
+  description!: string | null;
 
-  @Column
-  description!: string;
+  @Column({
+    type: DataType.DECIMAL(10, 2),
+    allowNull: true, // Total cost est optionnel
+  })
+  total_cost!: number | null;
 
-  @Column
-  totalCost!: number;
+  @Column({
+    type: DataType.TEXT,
+    allowNull: true, 
+  })
+  recommendations!: string | null;
 
-  @Column
-  recommendations!: string;
-
-  @Column
-  status!: string; // scheduled, in progress, completed
-
-  @HasMany(() => UsedPart)
-  usedParts!: UsedPart[];
+  @Column({
+    type: DataType.STRING(20),
+    allowNull: false,
+  })
+  status!: string;
 }
-export default Maintenance;

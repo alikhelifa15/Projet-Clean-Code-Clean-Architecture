@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import fs from 'fs';
 import path from 'path';
-const connectDB = async () => {
+export const connectDB = async () => {
   try {
     await mongoose.connect('mongodb://root:example@mongodb:27017/triumphMotorcyclesDb?authSource=admin');
     console.log('MongoDB connecté');

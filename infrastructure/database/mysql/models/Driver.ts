@@ -1,36 +1,51 @@
-import { Table, Column, Model, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
-import { PartnerCompany } from './PartnerCompany';
-import { Test } from './Test';
+import { Column, Model, Table, ForeignKey, DataType } from 'sequelize-typescript';
+import Company from './Company';
 
-@Table({ tableName: 'drivers' })
-export class Driver extends Model {
-  @Column
-  firstName!: string;
+@Table({
+  tableName: 'driver',
+  timestamps: false,
+})
+export default class Driver extends Model<Driver> {
+  @ForeignKey(() => Company)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  company_id!: number;
 
-  @Column
-  lastName!: string;
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+  })
+  first_name!: string;
 
-  @Column({ unique: true })
-  licenseNumber!: string;
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+  })
+  last_name!: string;
 
-  @Column
-  licenseDate!: Date;
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+    unique: true,
+  })
+  license_number!: string;
 
-  @Column
-  experience!: number;
+  @Column({
+    type: DataType.DATE,
+    allowNull: false,
+  })
+  license_date!: Date;
 
-  @Column
-  status!: string; // active, inactive, suspended
+  @Column({
+    type: DataType.STRING(255),
+  })
+  experience?: string;
 
-  @ForeignKey(() => PartnerCompany)
-  @Column
-  companyId!: number;
-
-  @BelongsTo(() => PartnerCompany)
-  company!: PartnerCompany;
-
-  @HasMany(() => Test)
-  tests!: Test[];
+  @Column({
+    type: DataType.STRING(20),
+    allowNull: false,
+  })
+  status!: string;
 }
-
-export default Driver;

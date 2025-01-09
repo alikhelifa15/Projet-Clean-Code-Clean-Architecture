@@ -1,28 +1,50 @@
-import { Table, Column, Model, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { Test } from './Test';
+import { Column, Model, Table, ForeignKey, DataType } from 'sequelize-typescript';
+import Test from './Test';  
 
-@Table({ tableName: 'incidents' })
-export class Incident extends Model {
+@Table({
+  tableName: 'incident',
+  timestamps: false,
+})
+export default class Incident extends Model<Incident> {
+  @Column({
+    type: DataType.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  })
+  id!: number;
+
   @ForeignKey(() => Test)
-  @Column
-  testId!: number;
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  test_id!: number;
 
-  @BelongsTo(() => Test)
-  test!: Test;
+  @Column({
+    type: DataType.DATE,
+    allowNull: false,
+  })
+  incident_date!: Date;
 
-  @Column
-  incidentDate!: Date;
+  @Column({
+    type: DataType.STRING(20),
+    allowNull: false,
+  })
+  type!: string;
 
-  @Column
-  type!: string; // accident, violation
+  @Column({
+    type: DataType.TEXT,
+  })
+  description?: string;
 
-  @Column
-  description!: string;
+  @Column({
+    type: DataType.STRING(20),
+    allowNull: false,
+  })
+  severity!: string;
 
-  @Column
-  severity!: string; // minor, moderate, major
-
-  @Column
-  actionsTaken!: string;
+  @Column({
+    type: DataType.TEXT,
+  })
+  actions_taken?: string;
 }
-export default Incident;

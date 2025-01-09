@@ -1,27 +1,35 @@
-import { Table, Column, Model, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { Maintenance } from './Maintenance';
-import { Part } from './Part';
+import { Column, Model, Table, ForeignKey, DataType } from 'sequelize-typescript';
+import Maintenance from './Maintenance';  
+import Part from './Part'; 
 
-@Table({ tableName: 'used_parts' })
-export class UsedPart extends Model {
+@Table({
+  tableName: 'used_part',
+  timestamps: false,
+})
+export default class UsedPart extends Model<UsedPart> {
   @ForeignKey(() => Maintenance)
-  @Column
-  maintenanceId!: number;
-
-  @BelongsTo(() => Maintenance)
-  maintenance!: Maintenance;
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  maintenance_id!: number;
 
   @ForeignKey(() => Part)
-  @Column
-  partId!: number;
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  part_id!: number;
 
-  @BelongsTo(() => Part)
-  part!: Part;
-
-  @Column
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
   quantity!: number;
 
-  @Column
-  unitPrice!: number;
+  @Column({
+    type: DataType.DECIMAL(10, 2),
+    allowNull: false,
+  })
+  unit_price!: number;
 }
-export default UsedPart;
