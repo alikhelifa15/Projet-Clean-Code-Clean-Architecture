@@ -17,7 +17,7 @@ export class User {
         throw new Error('Le mot de passe doit contenir au moins 6 caractères.');
       }
      
-      if (!['COMPANY', 'CLIENT'].includes(this.type)) {
+      if (!['COMPANY', 'DEALER'].includes(this.type)) {
         throw new Error('Le type utilisateur est invalide.');
       }
     }

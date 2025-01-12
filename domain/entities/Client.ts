@@ -2,7 +2,7 @@ export class Client {
     constructor(
       public id: number ,
       public userId: number,
-      public companyId: number | null,
+      public dealerId: number | null,
       public firstName: string,
       public lastName: string,
       public phone: string | null

@@ -1,6 +1,6 @@
 import { Column, ForeignKey, Model, Table, DataType } from 'sequelize-typescript';
-import  User  from './User'; 
-import  Company  from './Company'; 
+import User from './User';
+import Dealer from './Dealer';
 
 @Table({
   tableName: 'client',
@@ -21,12 +21,12 @@ export default class Client extends Model<Client> {
   })
   user_id!: number;
 
-  @ForeignKey(() => Company)
+  @ForeignKey(() => Dealer)
   @Column({
     type: DataType.INTEGER,
     allowNull: true,
   })
-  company_id!: number | null;
+  dealer_id!: number | null;
 
   @Column({
     type: DataType.STRING(255),

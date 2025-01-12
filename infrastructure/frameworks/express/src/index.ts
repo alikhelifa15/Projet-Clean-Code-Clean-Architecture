@@ -8,11 +8,11 @@ import { SignUpCommand } from '../../../../application/usecases/commands/SignUpC
 
 import { UserRepository } from '../../../adaptres/repositories/UserRepository';
 import { CompanyRepository } from '../../../adaptres/repositories/CompanyRepository';
-import { ClientRepository } from '../../../adaptres/repositories/ClientRepository';
 import { JwtService } from '../../../adaptres/services/JwtService';
 import { HashService } from '../../../adaptres/services/HashService';
 import authRoutes from '../../../../interface/routes/authRoutes';
 import { CommandBus } from '../../../../application/usecases/CommandBus';
+import { DealerRepository } from '../../../adaptres/repositories/DealerRepository';
 
 dotenv.config();
 
@@ -22,12 +22,12 @@ const PORT = process.env.PORT || 3000;
 const commandBus = new CommandBus();
 const userRepository = new UserRepository ();
 const companyRepository = new CompanyRepository ();
-const clientRepository = new ClientRepository ();
+const dealerRepository = new DealerRepository ();
 const jwtService = new JwtService();
 const hashService = new HashService();
 
 commandBus.register(LoginCommand, new LoginCommandHandler(userRepository, jwtService,hashService));
-commandBus.register(SignUpCommand, new SignUpCommandHandler(userRepository, clientRepository, companyRepository, hashService));
+commandBus.register(SignUpCommand, new SignUpCommandHandler(userRepository, dealerRepository, companyRepository, hashService));
 
 app.use(express.urlencoded({ extended: true }));
 

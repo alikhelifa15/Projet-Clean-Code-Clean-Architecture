@@ -1,24 +1,22 @@
 import { ClientRepository as IClientRepository } from '../../../application/repositories/ClientRepository';
 import { Client } from '../../../domain/entities/Client';
-import ClientModel from '../../database/mysql/models/Client';  // Le modèle Sequelize pour Client
+import ClientModel from '../../database/mysql/models/Client';  
 
 export class ClientRepository implements IClientRepository {
-  // Méthode pour enregistrer un client
   async save(client: Client): Promise<Client> {
 
     const clientModel = await ClientModel.create({
       id: client.id,  
       user_id: client.userId,
-      company_id: client.companyId,
+      dealer_id: client.dealerId,
       first_name: client.firstName,
       last_name: client.lastName,
       phone: client.phone,
     }as any);
-    // Transformer le modèle Sequelize en un objet métier Client
     return new Client(
       clientModel.id,
       clientModel.user_id,
-      clientModel.company_id,
+      clientModel.dealer_id,
       clientModel.first_name,
       clientModel.last_name,
       clientModel.phone
@@ -26,7 +24,6 @@ export class ClientRepository implements IClientRepository {
    
   }
 
-  // Méthode pour trouver un client par son ID
   async findById(id: number): Promise<Client | null> {
     const clientModel = await ClientModel.findByPk(id);
     if (!clientModel) {
@@ -35,14 +32,13 @@ export class ClientRepository implements IClientRepository {
     return new Client(
       clientModel.id,
       clientModel.user_id,
-      clientModel.company_id,
+      clientModel.dealer_id,
       clientModel.first_name,
       clientModel.last_name,
       clientModel.phone
     );
   }
 
-  // Méthode pour trouver un client par son userId
   async findByUserId(userId: number): Promise<Client | null> {
     const clientModel = await ClientModel.findOne({
       where: { user_id: userId },
@@ -53,7 +49,7 @@ export class ClientRepository implements IClientRepository {
     return new Client(
       clientModel.id,
       clientModel.user_id,
-      clientModel.company_id,
+      clientModel.dealer_id,
       clientModel.first_name,
       clientModel.last_name,
       clientModel.phone
@@ -69,7 +65,7 @@ export class ClientRepository implements IClientRepository {
     }
     const updateData = {
       user_id: client.userId,
-      company_id: client.companyId,
+      company_id: client.dealerId,
       first_name: client.firstName,
       last_name: client.lastName,
       phone: client.phone,

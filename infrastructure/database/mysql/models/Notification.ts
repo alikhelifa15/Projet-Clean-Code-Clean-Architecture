@@ -1,6 +1,7 @@
 import { Column, Model, Table, ForeignKey, DataType } from 'sequelize-typescript';
 import Company from './Company'; 
 import Client from './Client';    
+import Dealer from './Dealer';
 
 @Table({
   tableName: 'notification',
@@ -49,6 +50,12 @@ export default class Notification extends Model<Notification> {
     type: DataType.INTEGER,
   })
   company_id!: number;
+  @ForeignKey(() => Dealer)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  dealer_id!: number | null;
 
   @ForeignKey(() => Client)
   @Column({

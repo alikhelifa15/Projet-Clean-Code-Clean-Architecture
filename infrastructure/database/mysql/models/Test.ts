@@ -1,6 +1,7 @@
 import { Column, Model, Table, ForeignKey, DataType } from 'sequelize-typescript';
 import Motorcycle from './Motorcycle';  
 import Driver from './Driver'; 
+import Client from './Client';
 
 @Table({
   tableName: 'test',
@@ -20,6 +21,12 @@ export default class Test extends Model<Test> {
     allowNull: false,
   })
   driver_id!: number;
+  @ForeignKey(() => Client)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  client_id!: number;
 
   @Column({
     type: DataType.DATE,

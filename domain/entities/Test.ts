@@ -2,6 +2,7 @@ export class Test {
     constructor(
       public motorcycleId: number,
       public driverId: number,
+      public clientId: number,
       public startDate: Date,
       public startingMileage: number,
       public id?: number,

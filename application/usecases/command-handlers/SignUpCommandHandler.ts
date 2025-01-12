@@ -1,17 +1,17 @@
 import { UserRepository } from '../../../infrastructure/adaptres/repositories/UserRepository';
-import { ClientRepository } from '../../../infrastructure/adaptres/repositories/ClientRepository';
 import { CompanyRepository } from '../../../infrastructure/adaptres/repositories/CompanyRepository';
 
 import { HashService } from '../../../infrastructure/adaptres/services/HashService';
 import { User } from '../../../domain/entities/User';
 import { SignUpCommand } from '../../../application/usecases/commands/SignUpCommand';
 import { CommandHandler } from '../CommandBus';
-import { Client } from '../../../domain/entities/Client';
+import { Dealer } from '../../../domain/entities/Dealer';
 import { Company } from '../../../domain/entities/Company';
+import { DealerRepository } from '../../../infrastructure/adaptres/repositories/DealerRepository';
 export class SignUpCommandHandler implements CommandHandler<SignUpCommand> {
   constructor(
     private userRepository: UserRepository,
-    private clientRepository: ClientRepository,
+    private dealerRepository: DealerRepository,
     private companyRepository: CompanyRepository,
     private hashService: HashService
   ) {}
@@ -23,17 +23,19 @@ export class SignUpCommandHandler implements CommandHandler<SignUpCommand> {
  const savedUser = await this.userRepository.save(user);
 
  // Gérer l'enregistrement spécifique en fonction du type d'utilisateur
- if (command.type === 'CLIENT') {
-   const clientData = command.additionalData;
-   const client = new Client(
-     Number(null),
-     savedUser.id!,
-     clientData.companyId,
-     clientData.firstName,
-     clientData.lastName,
-     clientData.phone
+ if (command.type === 'DEALER') {
+   const dealerData = command.additionalData;
+   const dealer = new Dealer(
+      Number(null),
+      savedUser.id!,
+      dealerData.name,
+      dealerData.phone,
+      dealerData.address,
+      dealerData.postalCode,
+      dealerData.city,
+      dealerData.services
    );
-   await this.clientRepository.save(client);
+   await this.dealerRepository.save(dealer);
  } else if (command.type === 'COMPANY') {
    const companyData = command.additionalData;
    const company = new Company(

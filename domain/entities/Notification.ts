@@ -7,6 +7,7 @@ export class Notification {
       public status: string,
       public referenceId: number | null,
       public companyId: number | null,
+      public dealerId: number | null,
       public clientId: number | null
     ) {
       this.validate();

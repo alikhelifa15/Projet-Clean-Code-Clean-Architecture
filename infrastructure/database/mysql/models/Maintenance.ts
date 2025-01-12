@@ -16,7 +16,7 @@ export default class Maintenance extends Model<Maintenance> {
   @ForeignKey(() => Motorcycle)
   @Column({
     type: DataType.INTEGER,
-    allowNull: false, // Assurez-vous que la clé étrangère est obligatoire si nécessaire
+    allowNull: false, 
   })
   motorcycle_id!: number;
 

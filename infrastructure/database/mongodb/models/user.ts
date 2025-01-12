@@ -28,19 +28,5 @@ const UserSchema: Schema = new Schema({
 
 const UserMongo = mongoose.model<IUser>('User', UserSchema);
 
-const newUser = new UserMongo({
-  email: 'utilisateur@example.com',
-  password: 'securePassword123',
-  type: 'admin',
-});
-
-newUser
-  .save()
-  .then(() => {
-    console.log('Utilisateur enregistré avec succès !');
-  })
-  .catch((error) => {
-    console.error('Erreur lors de l\'enregistrement de l\'utilisateur :', error);
-  });
 
 export default UserMongo;

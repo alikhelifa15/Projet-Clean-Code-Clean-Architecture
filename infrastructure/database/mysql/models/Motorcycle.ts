@@ -1,6 +1,7 @@
 import { Column, ForeignKey, Model, Table, DataType } from 'sequelize-typescript';
-import  Company  from './Company'; 
-import  MotorcycleModel  from './MotorcycleModel'; 
+import Company from './Company';
+import Dealer from './Dealer';
+import MotorcycleModel from './MotorcycleModel';
 
 @Table({
   tableName: 'motorcycle',
@@ -17,16 +18,23 @@ export default class Motorcycle extends Model<Motorcycle> {
   @ForeignKey(() => Company)
   @Column({
     type: DataType.INTEGER,
-    allowNull: true, 
+    allowNull: false,
   })
-  company_id!: number | null;
+  company_id!: number;
+
+  @ForeignKey(() => Dealer)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  dealer_id!: number;
 
   @ForeignKey(() => MotorcycleModel)
   @Column({
     type: DataType.INTEGER,
-    allowNull: true, 
+    allowNull: false,
   })
-  model_id!: number | null;
+  model_id!: number;
 
   @Column({
     type: DataType.STRING(255),
@@ -50,6 +58,9 @@ export default class Motorcycle extends Model<Motorcycle> {
   @Column({
     type: DataType.STRING(20),
     allowNull: false,
+    validate: {
+      isIn: [['active', 'maintenance', 'inactive']],
+    },
   })
   status!: string;
 

@@ -63,3 +63,4 @@ connection.query(`CREATE DATABASE IF NOT EXISTS ${dbConfig.database}`, (err) => 
       });
   }
 });
+

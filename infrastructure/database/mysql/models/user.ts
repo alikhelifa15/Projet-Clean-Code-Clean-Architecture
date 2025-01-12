@@ -8,27 +8,7 @@ import {
   AfterUpdate,
 } from "sequelize-typescript";
 import UserMongo from "../../mongodb/models/user";
-import mongoose from "mongoose";
 
-const MONGO_URI = 'mongodb://root:example@mongodb:27017/triumphMotorcyclesDb?authSource=admin';
-const MONGO_OPTIONS = {
-  serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
-  connectTimeoutMS: 10000,
-  retryWrites: true,
-};
-
-async function ensureMongoConnection() {
-  if (mongoose.connection.readyState !== 1) {
-    try {
-      await mongoose.connect(MONGO_URI, MONGO_OPTIONS);
-    } catch (error) {
-      console.error('Erreur de connexion MongoDB:', error);
-      throw new Error('Impossible de se connecter à MongoDB');
-    }
-  }
-  return mongoose.connection;
-}
 
 @Table({
   tableName: "user",
@@ -70,7 +50,6 @@ export default class User extends Model<User> {
   @AfterSave
   static async saveToMongo(user: User) {
     try {
-      await ensureMongoConnection();
       
       const newUser = new UserMongo({
         email: user.email,
@@ -90,7 +69,6 @@ export default class User extends Model<User> {
   @AfterDestroy
   static async deleteFromMongo(user: User) {
     try {
-      await ensureMongoConnection();
       await UserMongo.deleteOne({ email: user.email });
       console.log('Utilisateur supprimé de MongoDB avec succès !');
     } catch (err) {
@@ -101,7 +79,6 @@ export default class User extends Model<User> {
   @AfterUpdate
   static async updateMongo(user: User) {
     try {
-      await ensureMongoConnection();
       await UserMongo.updateOne(
         { email: user.email },
         {

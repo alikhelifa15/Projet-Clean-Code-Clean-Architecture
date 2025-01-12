@@ -2,6 +2,7 @@ export class Motorcycle {
     constructor(
       public id: number | null,
       public companyId: number,
+      public dealerId: number,  
       public modelId: number,
       public serialNumber: string,
       public mileage: number = 0,

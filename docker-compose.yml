@@ -48,7 +48,7 @@ services:
     volumes:
       - .:/usr/src/app:delegated
       - /usr/src/app/node_modules
-    command: sh -c "yarn global add wait-port && wait-port mysql:3306 --timeout=300000 && cd infrastructure/frameworks/express && yarn install && yarn dev"
+    command: sh -c "yarn global add wait-port && wait-port mysql:3306 && cd infrastructure/frameworks/express && yarn install && yarn dev"
     depends_on:
       - mysql
     restart: on-failure
