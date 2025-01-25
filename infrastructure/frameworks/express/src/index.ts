@@ -4,6 +4,12 @@ import dotenv from 'dotenv';
 import '../../../database/mysql/models/index'; 
 import { LoginCommandHandler } from '../../../../application/usecases/command-handlers/LoginCommandHandler';
 import { SignUpCommandHandler } from '../../../../application/usecases/command-handlers/SignUpCommandHandler';
+import { CreateDriverCommandHandler } from '../../../../application/usecases/command-handlers/Diver-command-handler/CreateDriverCommandHandler';
+import { UpdateDriverCommandHandler } from '../../../../application/usecases/command-handlers/Diver-command-handler/UpdateDriverCommandHandler';
+import { DeleteDriverCommandHandler } from '../../../../application/usecases/command-handlers/Diver-command-handler/DeleteDriverCommandHandler';
+import { GetDriverByIdCommandHandler } from '../../../../application/usecases/command-handlers/Diver-command-handler/GetDriverByIdCommandHandler';
+
+
 import { LoginCommand } from '../../../../application/usecases/commands/LoginCommand';
 import { SignUpCommand } from '../../../../application/usecases/commands/SignUpCommand';
 import { DeleteUserCommand } from '../../../../application/usecases/commands/DeleteUserCommand';
@@ -17,14 +23,24 @@ import { UpdateMotorcycleCommandHandler } from '../../../../application/usecases
 import { DeleteMotorcycleCommand } from '../../../../application/usecases/commands/DeleteMotorcycleCommand';
 import { DeleteMotorcycleCommandHandler } from '../../../../application/usecases/command-handlers/DeleteMotorcycleCommandHandler';
   import { MotorcycleRepository } from '../../../adaptres/repositories/MotorcycleRepository';
+import { CreateDriverCommand } from '../../../../application/usecases/commands/Driver-Commands/CreateDriverCommand';
+import { UpdateDriverCommand } from '../../../../application/usecases/commands/Driver-Commands/UpdateDriverCommand';
+import { DeleteDriverCommand } from '../../../../application/usecases/commands/Driver-Commands/DeleteDriverCommand';
+import { GetDriverByIdCommand } from '../../../../application/usecases/commands/Driver-Commands/GetDriverByIdCommand';
+
 import { UserRepository } from '../../../adaptres/repositories/UserRepository';
 import { CompanyRepository } from '../../../adaptres/repositories/CompanyRepository';
+import { DealerRepository } from '../../../adaptres/repositories/DealerRepository';
+import { DriverRepository } from '../../../adaptres/repositories/DriverRepository';
 import { JwtService } from '../../../adaptres/services/JwtService';
 import { HashService } from '../../../adaptres/services/HashService';
 import userRoutes from '../../../../interface/routes/userRoutes';
 import motorcycleRoutes from '../../../../interface/routes/motorcycleRoutes';
+
+import authRoutes from '../../../../interface/routes/authRoutes';
+import driverRoutes from '../../../../interface/routes/driverRoutes';
+
 import { CommandBus } from '../../../../application/usecases/CommandBus';
-import { DealerRepository } from '../../../adaptres/repositories/DealerRepository';
 
 dotenv.config();
 
@@ -34,13 +50,20 @@ app.use(cors({
 }));
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
+
 const commandBus = new CommandBus();
+
+// Repositories
 const userRepository = new UserRepository ();
 const companyRepository = new CompanyRepository ();
 const dealerRepository = new DealerRepository ();
 const motorcycleRepository = new MotorcycleRepository ();
+const driverRepository = new DriverRepository();
+
+// Services
 const jwtService = new JwtService();
 const hashService = new HashService();
+
 // Register authentication command handlers
 commandBus.register(LoginCommand, new LoginCommandHandler(userRepository, companyRepository, dealerRepository, jwtService,hashService));
 commandBus.register(SignUpCommand, new SignUpCommandHandler(userRepository, dealerRepository, companyRepository, hashService));
@@ -53,15 +76,32 @@ commandBus.register(CreateMotorcycleCommand, new CreateMotorcycleCommandHandler(
 commandBus.register(UpdateMotorcycleCommand, new UpdateMotorcycleCommandHandler(motorcycleRepository));
 commandBus.register(DeleteMotorcycleCommand, new DeleteMotorcycleCommandHandler(motorcycleRepository));
 
+// driver Command Handlers
+
+commandBus.register(CreateDriverCommand, new CreateDriverCommandHandler(driverRepository));
+commandBus.register(UpdateDriverCommand, new UpdateDriverCommandHandler(driverRepository));
+commandBus.register(DeleteDriverCommand, new DeleteDriverCommandHandler(driverRepository));
+commandBus.register(GetDriverByIdCommand, new GetDriverByIdCommandHandler(driverRepository));
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', userRoutes(commandBus));
 app.use('/api/motorcycles', motorcycleRoutes(commandBus));
+
+// Routes
+app.use('/auth', authRoutes(commandBus));
+app.use('/api', driverRoutes(commandBus));
+
 app.get('/api/hello', (req: Request, res: Response) => {
   res.send('Hello from Express!');
 });
 
-// Lancement du serveur
+
+app.use(express.urlencoded({ extended: true }));
+
+
+
+// Start Server
 app.listen(PORT, () => {
   console.log(`Express server running on http://localhost:${PORT}`);
 });
