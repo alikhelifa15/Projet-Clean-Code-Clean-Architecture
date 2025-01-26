@@ -68,21 +68,28 @@ export class DriverRepository implements IDriverRepository {
   // Méthode pour mettre à jour un driver
   async update(id: number, updatedFields: Partial<Driver>): Promise<Driver | null> {
     const driver = await DriverModel.findByPk(id);
-
-    if (!driver) {
-      return null;
+    if (driver) {
+      console.log('Driver found:', driver.toJSON());
     }
-
-    await driver.update({
-      company_id: updatedFields.companyId,
-      first_name: updatedFields.firstName,
-      last_name: updatedFields.lastName,
-      license_number: updatedFields.licenseNumber,
-      license_date: updatedFields.licenseDate,
-      experience: updatedFields.experience ?? " ", 
-      status: updatedFields.status,
-    });
-
+    if (!driver) {
+      throw new Error(`Driver with ID ${id} not found`);
+    }
+  
+    // Mise à jour de l'instance
+    await driver.update(
+      {
+        company_id: updatedFields.companyId,
+        first_name: updatedFields.firstName,
+        last_name: updatedFields.lastName,
+        license_number: updatedFields.licenseNumber,
+        license_date: updatedFields.licenseDate,
+        experience: updatedFields.experience ?? "",
+        status: updatedFields.status,
+      },
+      { validate: true } // Optionnel : valider les contraintes du modèle
+    );
+  
+    // Retourner une instance logique
     return new Driver(
       driver.id,
       driver.company_id,

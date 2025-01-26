@@ -8,6 +8,7 @@ import { CreateDriverCommandHandler } from '../../../../application/usecases/com
 import { UpdateDriverCommandHandler } from '../../../../application/usecases/command-handlers/Diver-command-handler/UpdateDriverCommandHandler';
 import { DeleteDriverCommandHandler } from '../../../../application/usecases/command-handlers/Diver-command-handler/DeleteDriverCommandHandler';
 import { GetDriverByIdCommandHandler } from '../../../../application/usecases/command-handlers/Diver-command-handler/GetDriverByIdCommandHandler';
+import { GetAllDriversCommandHandler } from '../../../../application/usecases/command-handlers/Diver-command-handler/GetAllDriversCommandHandler';
 
 
 import { LoginCommand } from '../../../../application/usecases/commands/LoginCommand';
@@ -27,6 +28,7 @@ import { CreateDriverCommand } from '../../../../application/usecases/commands/D
 import { UpdateDriverCommand } from '../../../../application/usecases/commands/Driver-Commands/UpdateDriverCommand';
 import { DeleteDriverCommand } from '../../../../application/usecases/commands/Driver-Commands/DeleteDriverCommand';
 import { GetDriverByIdCommand } from '../../../../application/usecases/commands/Driver-Commands/GetDriverByIdCommand';
+import { GetAllDriversCommand } from '../../../../application/usecases/commands/Driver-Commands/GetAllDriversCommand';
 
 import { UserRepository } from '../../../adaptres/repositories/UserRepository';
 import { CompanyRepository } from '../../../adaptres/repositories/CompanyRepository';
@@ -82,6 +84,8 @@ commandBus.register(CreateDriverCommand, new CreateDriverCommandHandler(driverRe
 commandBus.register(UpdateDriverCommand, new UpdateDriverCommandHandler(driverRepository));
 commandBus.register(DeleteDriverCommand, new DeleteDriverCommandHandler(driverRepository));
 commandBus.register(GetDriverByIdCommand, new GetDriverByIdCommandHandler(driverRepository));
+commandBus.register(GetDriverByIdCommand, new GetDriverByIdCommandHandler(driverRepository));
+commandBus.register(GetAllDriversCommand, new GetAllDriversCommandHandler(driverRepository));
 
 app.use(express.urlencoded({ extended: true }));
 

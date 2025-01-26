@@ -11,19 +11,28 @@ export class UpdateDriverCommandHandler
   async execute(command: UpdateDriverCommand): Promise<Driver> {
     const driver = await this.driverRepository.findById(command.id);
 
-    if (!driver) {
-      throw new Error('Driver not found');
-    }
+  if (!driver) {
+    throw new Error('Driver not found');
+  }
 
-    // Mettre à jour les champs uniquement si des valeurs sont fournies
-    driver.companyId = command.companyId ?? driver.companyId;
-    driver.firstName = command.firstName ?? driver.firstName;
-    driver.lastName = command.lastName ?? driver.lastName;
-    driver.licenseNumber = command.licenseNumber ?? driver.licenseNumber;
-    driver.licenseDate = command.licenseDate ?? driver.licenseDate;
-    driver.experience = command.experience ?? driver.experience;
-    driver.status = command.status ?? driver.status;
+  // Créer un objet avec les champs mis à jour
+  const updatedFields: Partial<Driver> = {
+    companyId: command.companyId ?? driver.companyId,
+    firstName: command.firstName ?? driver.firstName,
+    lastName: command.lastName ?? driver.lastName,
+    licenseNumber: command.licenseNumber ?? driver.licenseNumber,
+    licenseDate: command.licenseDate ?? driver.licenseDate,
+    experience: command.experience ?? driver.experience,
+    status: command.status ?? driver.status,
+  };
 
-    return this.driverRepository.save(driver);
+  // Appeler la méthode update avec l'ID et les champs mis à jour
+  const updatedDriver = await this.driverRepository.update(command.id, updatedFields);
+
+  if (!updatedDriver) {
+    throw new Error('Failed to update driver');
+  }
+
+  return updatedDriver;
   }
 }

@@ -12,6 +12,7 @@ export default (commandBus: CommandBus) => {
 
   router.get('/getDriver/:id', (req, res) => driverController.getDriverById(req, res));
 
+  router.get('/getAllDrivers', (req, res) => driverController.getAllDrivers(req, res));
 
   router.delete('/deleteDriver/:id', (req, res) => driverController.deleteDriver(req, res));
 

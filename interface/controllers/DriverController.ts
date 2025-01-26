@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { CommandBus } from '../../application/usecases/CommandBus';
 import { CreateDriverCommand } from '../../application/usecases/commands/Driver-Commands/CreateDriverCommand';
 import { UpdateDriverCommand } from '../../application/usecases/commands/Driver-Commands/UpdateDriverCommand';
+import { GetAllDriversCommand } from '../../application/usecases/commands/Driver-Commands/GetAllDriversCommand';
 import { DeleteDriverCommand } from '../../application/usecases/commands/Driver-Commands/DeleteDriverCommand';
 import { GetDriverByIdCommand } from '../../application/usecases/commands/Driver-Commands/GetDriverByIdCommand';
 
@@ -108,5 +109,18 @@ export class DriverController {
       }
   }
 
+  // Méthode pour obtenir tous les drivers
+  async getAllDrivers(req: Request, res: Response): Promise<any> {
+    try {
+      // Instancier et exécuter la commande
+      const command = new GetAllDriversCommand();
+      const drivers = await this.commandBus.execute(command);
+
+      // Retourner la liste des drivers avec un statut 200
+      return res.status(200).json({ drivers });
+    } catch (error) {
+        if (error instanceof Error){res.status(400).json({ error: error.message });} 
+    }
+  }
 
 }
