@@ -1,29 +1,29 @@
-import { UserRepository as IUserRepository } from '../../../application/repositories/UserRepository';
-import { User } from '../../../domain/entities/User';
-import UserModel from '../../database/mysql/models/User'; // Le modèle Sequelize
+import { UserRepository as IUserRepository } from "../../../application/repositories/UserRepository";
+import { User } from "../../../domain/entities/User";
+import { Email } from "../../../domain/value-objects/Email";
+import { Password } from "../../../domain/value-objects/Password";
+import { UserType } from "../../../domain/value-objects/UserType";
+import UserMongo from "../../database/mongodb/models/user";
+import UserModel from "../../database/mysql/models/User";
 
 export class UserRepository implements IUserRepository {
-  // Méthode pour enregistrer un utilisateur
   async save(user: User): Promise<User> {
-    // Créer un utilisateur dans la base de données avec Sequelize
     const userModel = await UserModel.create({
-      email: user.email,
-      password: user.password,
-      type: user.type,
+      email: user.getEmail(),
+      password: user.getPassword(),
+      type: user.getType(),
       creationDate: user.creationDate,
     } as any);
 
-    // Transformer le modèle Sequelize en un objet métier User
     return new User(
-      userModel.id, // id généré automatiquement
-      userModel.email,
-      userModel.password,
-      userModel.type,
+      userModel.id,
+      new Email(userModel.email),
+      new Password(userModel.password),
+      new UserType(userModel.type),
       userModel.creationDate
     );
   }
 
-  // Méthode pour trouver un utilisateur par son email
   async findByEmail(email: string): Promise<User | null> {
     const userModel = await UserModel.findOne({
       where: { email },
@@ -35,14 +35,13 @@ export class UserRepository implements IUserRepository {
 
     return new User(
       userModel.id,
-      userModel.email,
-      userModel.password,
-      userModel.type,
+      new Email(userModel.email),
+      new Password(userModel.password),
+      new UserType(userModel.type),
       userModel.creationDate
     );
   }
 
-  // Méthode pour trouver un utilisateur par son ID
   async findById(id: number): Promise<User | null> {
     const userModel = await UserModel.findByPk(id);
 
@@ -52,10 +51,53 @@ export class UserRepository implements IUserRepository {
 
     return new User(
       userModel.id,
-      userModel.email,
-      userModel.password,
-      userModel.type,
+      new Email(userModel.email),
+      new Password(userModel.password),
+      new UserType(userModel.type),
       userModel.creationDate
     );
+  }
+
+  async update(user: User): Promise<User> {
+    try {
+      if (!user.id) {
+        throw new Error("id user is required");
+      }
+      
+      const updatedUser = await UserMongo.findOneAndUpdate(
+        { id: user.id },
+        {
+          email: user.getEmail(),
+          password: user.getPassword(),
+          type: user.getType(),
+          creationDate: user.creationDate
+        },
+        { new: true }
+      );
+  
+      if (!updatedUser) {
+        throw new Error("User not found");
+      }
+  
+      return user;
+    } catch (error) {
+      console.error("Error updating user:", error);
+      throw error;
+    }
+  }
+
+  async delete(id: number): Promise<boolean> {
+    try {
+      const user = await UserMongo.findOneAndDelete({ id });
+      if (!user) {
+      throw new Error("User not found");
+    }        
+
+      console.log("User deleted successfully");
+      return true;
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      return false;
+    }
   }
 }

@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import RedirImage from "../assets/Register/rider.png";
-import ComanyImage from "../assets/Register/settings.png";
+import DealerImage from "../../assets/Register/exchange.png";
+import ComanyImage from "../../assets/Register/settings.png";
 import { Link } from "react-router-dom";
 
 const Register: React.FC = () => {
-  // Initialisez selectedProfile avec l'id "motard"
-  const [selectedProfile, setSelectedProfile] = useState<string>("user");
+  const [selectedProfile, setSelectedProfile] = useState<string>("dealer");
 
   const profiles = [
     {
-      id: "user",
-      title: "Motard",
-      image: RedirImage,
+      id: "dealer",
+      title: "Concessionnaire",
+      image: DealerImage,
     },
     {
       id: "company",

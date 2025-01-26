@@ -1,7 +1,7 @@
 import React, { useState, ReactNode } from 'react';
 import Navbar from '../components/NavBar';
 import Sidebar from '../components/Sidebar/index';
-
+import { ToastContainer } from 'react-toastify';
 const DefaultLayoutDashbord: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -18,7 +18,7 @@ const DefaultLayoutDashbord: React.FC<{ children: ReactNode }> = ({ children }) 
           {/* <!-- ===== Header Start ===== --> */}
           <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           {/* <!-- ===== Header End ===== --> */}
-
+            <ToastContainer />
           {/* <!-- ===== Main Content Start ===== --> */}
           <main>
             <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">

@@ -1,25 +1,25 @@
+import { Email } from '../value-objects/Email';
+import { Password } from '../value-objects/Password';
+import { UserType } from '../value-objects/UserType';
+
 export class User {
-    constructor(
-      public id: number | null,
-      public email: string,
-      public password: string,
-      public type: string,
-      public creationDate: Date = new Date()
-    ) {
-      this.validate();
-    }
-  
-    private validate(): void {
-      if (!this.email.includes('@')) {
-        throw new Error('L\'email est invalide.');
-      }
-      if (this.password.length < 6) {
-        throw new Error('Le mot de passe doit contenir au moins 6 caractères.');
-      }
-     
-      if (!['COMPANY', 'DEALER'].includes(this.type)) {
-        throw new Error('Le type utilisateur est invalide.');
-      }
-    }
+  constructor(
+    public readonly id: number | null|string,
+    private readonly email: Email,
+    private readonly password: Password,
+    private readonly type: UserType,
+    public readonly creationDate: Date = new Date()
+  ) {}
+
+  getEmail(): string {
+    return this.email.toString();
   }
-  
+
+  getPassword(): string {
+    return this.password.toString();
+  }
+
+  getType(): string {
+    return this.type.toString();
+  }
+}

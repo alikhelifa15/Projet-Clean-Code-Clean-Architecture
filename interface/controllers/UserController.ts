@@ -2,8 +2,10 @@ import { Request, Response } from "express";
 import { CommandBus } from "../../application/usecases/CommandBus";
 import { LoginCommand } from "../../application/usecases/commands/LoginCommand";
 import { SignUpCommand } from "../../application/usecases/commands/SignUpCommand";
+import { UpdateUserCommand } from "../../application/usecases/commands/UpdateUserCommand";
+import { DeleteUserCommand } from "../../application/usecases/commands/DeleteUserCommand";
 
-export class AuthController {
+export class UserController {
   constructor(private commandBus: CommandBus) {}
 
   async login(req: Request, res: Response): Promise<void> {
@@ -36,4 +38,47 @@ export class AuthController {
         res.status(400).json({ error: error.message });
     }
   }
+
+
+
+  async updateUser(req: Request, res: Response): Promise<void> {
+    try {
+      const userId = parseInt(req.params.id);
+      const { email, type, additionalData, password } = req.body;
+      
+      const updateCommand = new UpdateUserCommand(
+        userId,
+        email,
+        password,
+        type,
+        additionalData
+      );
+      
+      const updatedUser = await this.commandBus.execute(updateCommand);
+      res.status(200).json({ 
+        message: "User updated successfully",
+      });
+    } catch (error) {
+      console.error("Error occurred during user update:", error);
+      if (error instanceof Error)
+        res.status(400).json({ error: error.message });
+    }
+  }
+
+  async deleteUser(req: Request, res: Response): Promise<void> {
+    try {
+      const userId = parseInt(req.params.id);
+      const deleteCommand = new DeleteUserCommand(userId);
+      
+      await this.commandBus.execute(deleteCommand);
+      res.status(200).json({ message: "User deleted successfully" });
+    } catch (error) {
+      console.error("Error occurred during user deletion:", error);
+      if (error instanceof Error)
+        res.status(400).json({ error: error.message });
+    }
+  }
 }
+
+
+

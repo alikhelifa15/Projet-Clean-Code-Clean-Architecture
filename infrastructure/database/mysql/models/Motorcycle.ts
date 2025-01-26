@@ -1,8 +1,9 @@
-import { Column, ForeignKey, Model, Table, DataType } from 'sequelize-typescript';
+import { Column, ForeignKey, Model, Table, DataType, AfterSave, AfterUpdate, AfterDestroy} from 'sequelize-typescript';
 import Company from './Company';
 import Dealer from './Dealer';
 import MotorcycleModel from './MotorcycleModel';
-
+import { connectDB } from '../../mongodb/models';
+import MotorcycleMongo from '../../mongodb/models/motorcycle';
 @Table({
   tableName: 'motorcycle',
   timestamps: false,
@@ -17,17 +18,17 @@ export default class Motorcycle extends Model<Motorcycle> {
 
   @ForeignKey(() => Company)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.INTEGER ,
     allowNull: false,
   })
-  company_id!: number;
+  company_id!: number | null;
 
   @ForeignKey(() => Dealer)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  dealer_id!: number;
+  dealer_id!: number | null;
 
   @ForeignKey(() => MotorcycleModel)
   @Column({
@@ -69,4 +70,91 @@ export default class Motorcycle extends Model<Motorcycle> {
     allowNull: false,
   })
   maintenance_interval!: number;
+ 
+  @AfterSave
+  static async saveToMongo(instance: Motorcycle) {
+    try {
+      await connectDB();
+      
+      console.log('Tentative de connexion à MongoDB...');
+      const existingMotorcycle = await MotorcycleMongo.findOne({
+        id: instance.id
+      });
+
+      if (existingMotorcycle) {
+        console.log('Motorcycle already exists in MongoDB, skipping save');
+        return;
+      }
+
+      const newMotorcycle = new MotorcycleMongo({
+        id: instance.id,
+        company_id: instance.company_id,
+        dealer_id: instance.dealer_id,
+        model_id: instance.model_id,
+        serial_number: instance.serial_number,
+        mileage: instance.mileage,
+        service_date: instance.service_date,
+        status: instance.status,
+        maintenance_interval: instance.maintenance_interval
+      });
+
+      await newMotorcycle.save();
+      console.log('Motorcycle saved to MongoDB successfully!');
+    } catch (err) {
+      console.error("Error saving motorcycle to MongoDB:", err);
+    }
+  }
+
+  @AfterUpdate
+  static async updateMongo(instance: Motorcycle) {
+    try {
+      await connectDB();
+      console.log('Tentative de mise à jour MongoDB...');
+      
+      const result = await MotorcycleMongo.updateOne(
+        { id: instance.id },
+        {
+          $set: {
+            company_id: instance.company_id,
+            dealer_id: instance.dealer_id,
+            model_id: instance.model_id,
+            serial_number: instance.serial_number,
+            mileage: instance.mileage,
+            service_date: instance.service_date,
+            status: instance.status,
+            maintenance_interval: instance.maintenance_interval
+          }
+        },
+        { upsert: true }
+      );
+
+      if (result.modifiedCount > 0 || result.upsertedCount > 0) {
+        console.log('Motorcycle updated/created in MongoDB successfully!');
+      } else {
+        console.log('No changes were necessary in MongoDB');
+      }
+    } catch (err) {
+      console.error("Error updating MongoDB:", err);
+      console.error("Instance:", JSON.stringify(instance, null, 2));
+    }
+  }
+
+  @AfterDestroy
+  static async deleteFromMongo(instance: Motorcycle) {
+    try {
+      await connectDB();
+      console.log('Tentative de suppression MongoDB pour ID:', instance.id);
+      
+      const result = await MotorcycleMongo.deleteOne({ id: instance.id });
+      
+      if (result.deletedCount > 0) {
+        console.log('Motorcycle successfully deleted from MongoDB');
+      } else {
+        console.log('No motorcycle found in MongoDB to delete');
+      }
+    } catch (err) {
+      console.error("Error deleting from MongoDB:", err);
+      console.error("Instance ID:", instance.id);
+    }
+  }
 }

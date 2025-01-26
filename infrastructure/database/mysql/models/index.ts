@@ -31,6 +31,7 @@ connection.query(`CREATE DATABASE IF NOT EXISTS ${dbConfig.database}`, (err) => 
     const sequelize = new Sequelize({
       ...dbConfig,
       dialect: 'mysql',
+    
       dialectOptions: {
         connectTimeout: 60000,
         connectionLimit: 10,
@@ -47,6 +48,7 @@ connection.query(`CREATE DATABASE IF NOT EXISTS ${dbConfig.database}`, (err) => 
         max: 5
       },
       models,
+  
     });
 
     sequelize.authenticate()

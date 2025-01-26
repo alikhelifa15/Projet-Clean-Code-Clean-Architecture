@@ -8,7 +8,7 @@ import {
   AfterUpdate,
 } from "sequelize-typescript";
 import UserMongo from "../../mongodb/models/user";
-
+import {connectDB} from "../../mongodb/models/index";
 
 @Table({
   tableName: "user",
@@ -23,7 +23,7 @@ export default class User extends Model<User> {
   id!: number;
 
   @Column({
-    type: DataType.STRING(255),
+    type: DataType.STRING(255), 
     allowNull: false,
     unique: true,
   })
@@ -50,8 +50,16 @@ export default class User extends Model<User> {
   @AfterSave
   static async saveToMongo(user: User) {
     try {
+      await connectDB();
       
+      const existingUser = await UserMongo.findOne({ email: user.email });
+      if (existingUser) {
+        console.log('User already exists in MongoDB, skipping save');
+        return;
+      }
+
       const newUser = new UserMongo({
+        id: user.id,
         email: user.email,
         password: user.password,
         type: user.type,
@@ -59,28 +67,30 @@ export default class User extends Model<User> {
       });
 
       await newUser.save();
-      console.log('Utilisateur enregistré dans MongoDB avec succès !');
+      console.log('User saved to MongoDB successfully!');
     } catch (err) {
-      console.error("Erreur lors de l'enregistrement dans MongoDB :", err);
-     
+      console.error("Error saving to MongoDB:", err);
+    
     }
   }
   
   @AfterDestroy
   static async deleteFromMongo(user: User) {
     try {
-      await UserMongo.deleteOne({ email: user.email });
-      console.log('Utilisateur supprimé de MongoDB avec succès !');
+      await connectDB();
+      await UserMongo.deleteOne({ email: user.id });
+      console.log('User deleted from MongoDB successfully!');
     } catch (err) {
-      console.error("Erreur lors de la suppression dans MongoDB :", err);
+      console.error("Error deleting from MongoDB:", err);
     }
   }
 
   @AfterUpdate
   static async updateMongo(user: User) {
     try {
-      await UserMongo.updateOne(
-        { email: user.email },
+      await connectDB();
+      const result = await UserMongo.updateOne(
+        { email: user.id },
         {
           email: user.email,
           password: user.password,
@@ -88,9 +98,15 @@ export default class User extends Model<User> {
           creationDate: user.creationDate,
         }
       );
-      console.log('Utilisateur mis à jour dans MongoDB avec succès !');
+
+      if (result.matchedCount === 0) {
+        // If no document was found to update, create a new one
+        await User.saveToMongo(user);
+      } else {
+        console.log('User updated in MongoDB successfully!');
+      }
     } catch (err) {
-      console.error("Erreur lors de la mise à jour dans MongoDB :", err);
+      console.error("Error updating MongoDB:", err);
     }
   }
 }

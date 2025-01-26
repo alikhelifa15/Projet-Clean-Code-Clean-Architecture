@@ -1,8 +1,8 @@
 export class Motorcycle {
     constructor(
       public id: number | null,
-      public companyId: number,
-      public dealerId: number,  
+      public companyId: number | null,
+      public dealerId: number | null,  
       public modelId: number,
       public serialNumber: string,
       public mileage: number = 0,

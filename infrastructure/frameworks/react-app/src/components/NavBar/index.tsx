@@ -1,7 +1,5 @@
-import { Link } from 'react-router-dom';
 import DropdownNotification from './DropdownNotification';
 import DropdownUser from './DropdownUser';
-import LogoIcon from '../../assets/logo.png';
 
 const Navbar = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -53,10 +51,6 @@ const Navbar = (props: {
             </span>
           </button>
           {/* <!-- Hamburger Toggle BTN --> */}
-
-          <Link className="block flex-shrink-0 lg:hidden" to="/">
-            <img src={LogoIcon} alt="Logo" />
-          </Link>
         </div>
 
         <div className="hidden sm:block">

@@ -1,11 +1,30 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import ClickOutside from '../ClickOutside';
-import UserOne from '../../assets/user-09.png';
-
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import ClickOutside from "../ClickOutside";
+import UserOne from "../../assets/user-09.png";
+import { useLogout } from "../../features/auth/hooks/useLogout";
+import { jwtDecode, JwtPayload } from "jwt-decode";
+interface DecodedToken extends JwtPayload {
+  id: string;
+  email: string;
+  type: { value: string };
+  company: string;
+  dealer: string;
+}
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const { logout } = useLogout();
+  const decodeToken = localStorage.getItem("token");
+  let infoUser: DecodedToken = {
+    id: "",
+    email: "",
+    type: { value: "" },
+    company: "",
+    dealer: "",
+  };
+  if (decodeToken) {
+    infoUser = jwtDecode<DecodedToken>(decodeToken);
+  }
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
       <Link
@@ -15,9 +34,13 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {infoUser.type?.value === "COMPANY"
+              ? infoUser.company
+              : infoUser.type?.value === "DEALER"
+              ? infoUser.dealer
+              : "ADMIN"}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">{infoUser.type?.value}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
@@ -72,7 +95,7 @@ const DropdownUser = () => {
                 My Profile
               </Link>
             </li>
-          
+
             <li>
               <Link
                 to="/settings"
@@ -99,7 +122,11 @@ const DropdownUser = () => {
               </Link>
             </li>
           </ul>
-          <Link to="/login" className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+          <Link
+            to="/login"
+            onClick={() => logout()}
+            className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+          >
             <svg
               className="fill-current"
               width="22"

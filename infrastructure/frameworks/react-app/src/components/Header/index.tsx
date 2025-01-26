@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/logo.png";
 import { menuData } from "./menuData";
 import { FaXmark, FaBars } from "react-icons/fa6";
+import { useAuth } from "../../features/auth/hooks/useAuth";
 
 const Header: React.FC = () => {
+  const { isAuthenticated } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [showDashboard, setShowDashboard] = useState<boolean>(false);
+
   const location = useLocation();
 
   const toggleMenu = (): void => {
@@ -22,7 +26,9 @@ const Header: React.FC = () => {
   const closeMenu = (): void => {
     setIsMenuOpen(false);
   };
-
+  useEffect(() => {
+    setShowDashboard(isAuthenticated);
+  }, [isAuthenticated]);
   return (
     <header className="w-full fixed top-0 left-0 right-0 z-99 transition-all duration-300 shadow-2 bg-white ">
       <div className="flex flex-row p-3 items-center justify-between">
@@ -66,7 +72,7 @@ const Header: React.FC = () => {
               isMenuOpen ? "flex" : "hidden"
             } md:flex`}
           >
-            {authMenuItems.map((item) =>
+            {!showDashboard && authMenuItems.map((item) =>
               item.id === 6 ? (
                 <Link
                   to={"/login"}
@@ -88,6 +94,14 @@ const Header: React.FC = () => {
                   {item.title}
                 </Link>
               )
+            )}
+            {showDashboard  && (
+              <Link
+                to={"/dashboard"}
+                className="h-10 mt-3 bg-primary text-white rounded-xl px-5  py-2  border-b border-[#e4e3e3] md:border-none"
+              >
+                Tableau de bord
+              </Link>
             )}
           </div>
         </nav>

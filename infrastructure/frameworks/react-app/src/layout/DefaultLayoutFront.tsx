@@ -1,6 +1,8 @@
 import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { ToastContainer } from 'react-toastify';
+
 
 const DefaultLayoutFront: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -12,6 +14,7 @@ const DefaultLayoutFront: React.FC<{ children: React.ReactNode }> = ({
       <Header/>
 
       {/* <!-- ===== Header End ===== --> */}
+      <ToastContainer />
 
       <main className="mt-20">{children}</main>
 
