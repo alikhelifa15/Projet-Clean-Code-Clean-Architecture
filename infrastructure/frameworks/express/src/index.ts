@@ -9,6 +9,9 @@ import { UpdateDriverCommandHandler } from '../../../../application/usecases/com
 import { DeleteDriverCommandHandler } from '../../../../application/usecases/command-handlers/Diver-command-handler/DeleteDriverCommandHandler';
 import { GetDriverByIdCommandHandler } from '../../../../application/usecases/command-handlers/Diver-command-handler/GetDriverByIdCommandHandler';
 import { GetAllDriversCommandHandler } from '../../../../application/usecases/command-handlers/Diver-command-handler/GetAllDriversCommandHandler';
+import { CreatePartCommandHandler } from '../../../../application/usecases/command-handlers/PartCommandHandler/CreatePartCommandHandler';
+import { UpdatePartCommandHandler } from '../../../../application/usecases/command-handlers/PartCommandHandler/UpdatePartCommandHandler';
+import { DeletePartCommandHandler } from '../../../../application/usecases/command-handlers/PartCommandHandler/DeletePartCommandHandler';
 
 
 import { LoginCommand } from '../../../../application/usecases/commands/LoginCommand';
@@ -29,18 +32,24 @@ import { UpdateDriverCommand } from '../../../../application/usecases/commands/D
 import { DeleteDriverCommand } from '../../../../application/usecases/commands/Driver-Commands/DeleteDriverCommand';
 import { GetDriverByIdCommand } from '../../../../application/usecases/commands/Driver-Commands/GetDriverByIdCommand';
 import { GetAllDriversCommand } from '../../../../application/usecases/commands/Driver-Commands/GetAllDriversCommand';
+import { CreatePartCommand } from '../../../../application/usecases/commands/PartCommands/CreatePartCommand';
+import { UpdatePartCommand } from '../../../../application/usecases/commands/PartCommands/UpdatePartCommand';
+import { DeletePartCommand } from '../../../../application/usecases/commands/PartCommands/DeletePartCommand';
+
 
 import { UserRepository } from '../../../adaptres/repositories/UserRepository';
 import { CompanyRepository } from '../../../adaptres/repositories/CompanyRepository';
 import { DealerRepository } from '../../../adaptres/repositories/DealerRepository';
 import { DriverRepository } from '../../../adaptres/repositories/DriverRepository';
+import { PartRepository } from '../../../adaptres/repositories/PartRepository';
 import { JwtService } from '../../../adaptres/services/JwtService';
 import { HashService } from '../../../adaptres/services/HashService';
 import userRoutes from '../../../../interface/routes/userRoutes';
 import motorcycleRoutes from '../../../../interface/routes/motorcycleRoutes';
 
 import authRoutes from '../../../../interface/routes/authRoutes';
-import driverRoutes from '../../../../interface/routes/driverRoutes';
+import driverRoutes from '../../../../interface/routes/DriverRoutes';
+import partRoutes from '../../../../interface/routes/PartRoutes';
 
 import { CommandBus } from '../../../../application/usecases/CommandBus';
 
@@ -61,6 +70,7 @@ const companyRepository = new CompanyRepository ();
 const dealerRepository = new DealerRepository ();
 const motorcycleRepository = new MotorcycleRepository ();
 const driverRepository = new DriverRepository();
+const partRepository = new PartRepository();
 
 // Services
 const jwtService = new JwtService();
@@ -86,6 +96,9 @@ commandBus.register(DeleteDriverCommand, new DeleteDriverCommandHandler(driverRe
 commandBus.register(GetDriverByIdCommand, new GetDriverByIdCommandHandler(driverRepository));
 commandBus.register(GetDriverByIdCommand, new GetDriverByIdCommandHandler(driverRepository));
 commandBus.register(GetAllDriversCommand, new GetAllDriversCommandHandler(driverRepository));
+commandBus.register(CreatePartCommand, new CreatePartCommandHandler(partRepository));
+commandBus.register(UpdatePartCommand, new UpdatePartCommandHandler(partRepository));
+commandBus.register(DeletePartCommand, new DeletePartCommandHandler(partRepository));
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -95,6 +108,7 @@ app.use('/api/motorcycles', motorcycleRoutes(commandBus));
 // Routes
 app.use('/auth', authRoutes(commandBus));
 app.use('/api', driverRoutes(commandBus));
+app.use('/api', partRoutes(commandBus));
 
 app.get('/api/hello', (req: Request, res: Response) => {
   res.send('Hello from Express!');
