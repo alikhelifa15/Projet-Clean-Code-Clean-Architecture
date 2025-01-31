@@ -47,7 +47,7 @@ import { HashService } from '../../../adaptres/services/HashService';
 import userRoutes from '../../../../interface/routes/userRoutes';
 import motorcycleRoutes from '../../../../interface/routes/motorcycleRoutes';
 
-import authRoutes from '../../../../interface/routes/authRoutes';
+
 import driverRoutes from '../../../../interface/routes/DriverRoutes';
 import partRoutes from '../../../../interface/routes/PartRoutes';
 
@@ -106,7 +106,7 @@ app.use('/api', userRoutes(commandBus));
 app.use('/api/motorcycles', motorcycleRoutes(commandBus));
 
 // Routes
-app.use('/auth', authRoutes(commandBus));
+
 app.use('/api', driverRoutes(commandBus));
 app.use('/api', partRoutes(commandBus));
 
