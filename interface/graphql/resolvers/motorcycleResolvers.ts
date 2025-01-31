@@ -2,6 +2,10 @@ import { GetAllMotorcyclesQueryHandler } from '../../../application/usecases/que
 import { GetMotorcycleQueryHandler } from '../../../application/usecases/query-handlers/GetMotorcycleQueryHandler';
 import { GetAllMotorcyclesQuery } from '../../../application/usecases/queries/GetAllMotorcyclesQuery';
 import { GetMotorcycleQuery } from '../../../application/usecases/queries/GetMotorcycleQuery';
+import { GetMotorcyclesByDealerQueryHandler } from '../../../application/usecases/query-handlers/GetMotorcyclesByDealerQueryHandler';
+import { GetMotorcyclesByDealerQuery } from '../../../application/usecases/queries/GetMotorcyclesByDealerQuery';
+import { GetMotorcyclesByCompanyQueryHandler } from '../../../application/usecases/query-handlers/GetMotorcyclesByCompanyQueryHandler';
+import { GetMotorcyclesByCompanyQuery } from '../../../application/usecases/queries/GetMotorcyclesByCompanyQuery';
 
 export const motorcycleResolvers = {
     motorcycle: async (_: unknown, { id }: { id: string }) => {
@@ -13,8 +17,10 @@ export const motorcycleResolvers = {
         id: result.id,
         companyId: result.company_id,
         dealerId: result.dealer_id,
-        modelId: result.model_id,
+        model: result.model,
+        brand: result.brand,
         serialNumber: result.serial_number,
+        photo: result.photo,
         mileage: result.mileage,
         serviceDate: result.service_date?.toISOString(),
         status: result.status,
@@ -28,13 +34,50 @@ export const motorcycleResolvers = {
         id: result.id,
         companyId: result.company_id,
         dealerId: result.dealer_id,
-        modelId: result.model_id,
+        brand: result.brand,
+        model: result.model,
         serialNumber: result.serial_number,
+        photo: result.photo,
         mileage: result.mileage,
         serviceDate: result.service_date?.toISOString(),
         status: result.status,
         maintenanceInterval: result.maintenance_interval
       }));
     },
-    
+    motorcyclesByDealer: async (_: unknown, { dealerId }: { dealerId: string }) => {
+      const handler = new GetMotorcyclesByDealerQueryHandler();
+      const results = await handler.execute(new GetMotorcyclesByDealerQuery(dealerId));
+      
+      return results.map(result => ({
+        id: result.id,
+        companyId: result.company_id || null,
+        dealerId: result.dealer_id || null,
+        model: result.model,
+        brand: result.brand,
+        serialNumber: result.serial_number,
+        photo: result.photo,
+        mileage: result.mileage,
+        serviceDate: result.service_date?.toISOString(),
+        status: result.status,
+        maintenanceInterval: result.maintenance_interval
+      }));
+    },
+    motorcyclesByCompany: async (_: unknown, { companyId }: { companyId: string }) => {
+      const handler = new GetMotorcyclesByCompanyQueryHandler();
+      const results = await handler.execute(new GetMotorcyclesByCompanyQuery(companyId));
+      
+      return results.map(result => ({
+        id: result.id,
+        companyId: result.company_id || null,
+        dealerId: result.dealer_id || null,
+        model: result.model,
+        brand: result.brand,
+        serialNumber: result.serial_number,
+        photo: result.photo,
+        mileage: result.mileage,
+        serviceDate: result.service_date?.toISOString(),
+        status: result.status,
+        maintenanceInterval: result.maintenance_interval
+      }));
+    }
   };

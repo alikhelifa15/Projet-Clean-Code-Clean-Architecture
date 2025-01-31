@@ -29,6 +29,8 @@ import { DealerRepository } from '../../../adaptres/repositories/DealerRepositor
 dotenv.config();
 
 const app = express();
+app.use(express.json({limit: '80mb'}));
+app.use(express.urlencoded({limit: '80mb', extended: true}));
 app.use(cors({
   origin: 'http://localhost:3001'
 }));
@@ -53,7 +55,6 @@ commandBus.register(CreateMotorcycleCommand, new CreateMotorcycleCommandHandler(
 commandBus.register(UpdateMotorcycleCommand, new UpdateMotorcycleCommandHandler(motorcycleRepository));
 commandBus.register(DeleteMotorcycleCommand, new DeleteMotorcycleCommandHandler(motorcycleRepository));
 
-app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', userRoutes(commandBus));
 app.use('/api/motorcycles', motorcycleRoutes(commandBus));
