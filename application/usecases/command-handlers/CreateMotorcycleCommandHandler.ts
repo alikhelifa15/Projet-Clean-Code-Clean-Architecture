@@ -11,9 +11,11 @@ export class CreateMotorcycleCommandHandler implements CommandHandler<CreateMoto
   async execute(command: CreateMotorcycleCommand): Promise<Motorcycle> {
     const motorcycle = new Motorcycle(
       null,
-      command.companyId,
-      command.dealerId,
-      command.modelId,
+      command.companyId || null,
+      command.dealerId || null,
+      command.brand,
+      command.model,
+      command.photo || '',
       command.serialNumber,
       command.additionalData?.mileage || 0,
       command.additionalData?.serviceDate || null,

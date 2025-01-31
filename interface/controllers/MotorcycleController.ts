@@ -12,8 +12,10 @@ export class MotorcycleController {
       const command = new CreateMotorcycleCommand(
         req.body.companyId,
         req.body.dealerId,
-        req.body.modelId,
+        req.body.brand,
+        req.body.model,
         req.body.serialNumber,
+        req.body.photo,
         req.body.status,
         req.body.maintenanceInterval,
         {
@@ -37,7 +39,8 @@ export class MotorcycleController {
       const command = new UpdateMotorcycleCommand(
         parseInt(req.params.id),
         req.body.mileage,
-        req.body.serviceDate ? new Date(req.body.serviceDate) : undefined,
+        req.body.serialNumber,
+        req.body.photo,
         req.body.status,
         req.body.maintenanceInterval
       );

@@ -7,8 +7,10 @@ export class MotorcycleRepository implements IMotorcycleRepository {
     const motorcycleModel = await MotorcycleModel.create({
       company_id: motorcycle.companyId || null,
       dealer_id: motorcycle.dealerId || null,
-      model_id: motorcycle.modelId,
+      brand: motorcycle.brand,
+      model: motorcycle.model,
       serial_number: motorcycle.serialNumber,
+      photo: motorcycle.photo || null,
       mileage: motorcycle.mileage,
       service_date: motorcycle.serviceDate,
       status: motorcycle.status,
@@ -19,8 +21,10 @@ export class MotorcycleRepository implements IMotorcycleRepository {
       motorcycleModel.id,
       motorcycleModel.company_id,
       motorcycleModel.dealer_id,
-      motorcycleModel.model_id,
+      motorcycleModel.model,
+      motorcycleModel.brand,
       motorcycleModel.serial_number,
+      motorcycleModel.photo,
       motorcycleModel.mileage,
       motorcycleModel.service_date,
       motorcycleModel.status,
@@ -36,8 +40,10 @@ export class MotorcycleRepository implements IMotorcycleRepository {
       motorcycleModel.id,
       motorcycleModel.company_id,
       motorcycleModel.dealer_id,
-      motorcycleModel.model_id,
+      motorcycleModel.brand,
+      motorcycleModel.model,
       motorcycleModel.serial_number,
+      motorcycleModel.photo,
       motorcycleModel.mileage,
       motorcycleModel.service_date,
       motorcycleModel.status,
@@ -45,24 +51,47 @@ export class MotorcycleRepository implements IMotorcycleRepository {
     );
   }
 
-  async findBySerialNumber(serialNumber: string): Promise<Motorcycle | null> {
-    const motorcycleModel = await MotorcycleModel.findOne({
-      where: { serial_number: serialNumber }
+  async findByDealerId(dealerId: string): Promise<Motorcycle[]> {
+    const motorcycles = await MotorcycleModel.findAll({
+      where: { dealer_id: dealerId },
     });
-    if (!motorcycleModel) return null;
-
-    return new Motorcycle(
-      motorcycleModel.id,
-      motorcycleModel.company_id,
-      motorcycleModel.dealer_id,
-      motorcycleModel.model_id,
-      motorcycleModel.serial_number,
-      motorcycleModel.mileage,
-      motorcycleModel.service_date,
-      motorcycleModel.status,
-      motorcycleModel.maintenance_interval
-    );
+    return motorcycles.map((motorcycle) => {
+      return new Motorcycle(
+        motorcycle.id,
+        motorcycle.company_id,
+        motorcycle.dealer_id,
+        motorcycle.brand,
+        motorcycle.model,
+        motorcycle.serial_number,
+        motorcycle.photo,
+        motorcycle.mileage,
+        motorcycle.service_date,
+        motorcycle.status,
+        motorcycle.maintenance_interval
+      );
+    });
   }
+
+  async findByCompanyId(companyId: string): Promise<Motorcycle[]> {
+    const motorcycles = await MotorcycleModel.findAll({
+      where: { company_id: companyId },
+    });
+    return motorcycles.map((motorcycle) => {
+      return new Motorcycle(
+        motorcycle.id,
+        motorcycle.company_id,
+        motorcycle.dealer_id,
+        motorcycle.brand,
+        motorcycle.model,
+        motorcycle.serial_number,
+        motorcycle.photo,
+        motorcycle.mileage,
+        motorcycle.service_date,
+        motorcycle.status,
+        motorcycle.maintenance_interval
+      );
+    });
+  } 
 
   async update(motorcycle: Motorcycle): Promise<Motorcycle> {
     if (!motorcycle.id) {
