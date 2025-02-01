@@ -1,9 +1,11 @@
 import { userTypeDefs } from './userSchema';
 import { motorcycleTypeDefs } from './motorcycleSchema';
+import { clientTypeDefs } from './clientSchema';
 
 export const schema = `
   ${userTypeDefs}
   ${motorcycleTypeDefs}
+  ${clientTypeDefs}
 
   type Query {
     # User queries
@@ -16,5 +18,10 @@ export const schema = `
     motorcycleBySerialNumber(serialNumber: String!): Motorcycle
     motorcyclesByDealer(dealerId: ID!): [Motorcycle!]!
     motorcyclesByCompany(companyId: ID!): [Motorcycle!]!
+
+    # Client queries
+    client(id: ID!): Client
+    clients: [Client!]!
+    clientsByDealer(dealerId: ID!): [Client!]!
   }
 `;

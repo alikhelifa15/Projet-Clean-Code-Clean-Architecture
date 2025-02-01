@@ -1,6 +1,6 @@
-import { connectDB } from '../../../infrastructure/database/mongodb/models';
-import MotorcycleMongo from '../../../infrastructure/database/mongodb/models/motorcycle';
-import { GetMotorcyclesByDealerQuery } from '../../../application/usecases/queries/GetMotorcyclesByDealerQuery';
+import { connectDB } from '../../../../infrastructure/database/mongodb/models';
+import MotorcycleMongo from '../../../../infrastructure/database/mongodb/models/motorcycle';
+import { GetMotorcyclesByDealerQuery } from '../../queries/Motorocycle-queries/GetMotorcyclesByDealerQuery';
 
 export class GetMotorcyclesByDealerQueryHandler {
   async execute(query: GetMotorcyclesByDealerQuery) {

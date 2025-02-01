@@ -1,15 +1,15 @@
-import { Company } from "../../../domain/entities/Company";
-import { Dealer } from "../../../domain/entities/Dealer";
-import { User } from "../../../domain/entities/User";
-import { Email } from "../../../domain/value-objects/Email";
-import { Password } from "../../../domain/value-objects/Password";
-import { UserType } from "../../../domain/value-objects/UserType";
-import { CompanyRepository } from "../../../infrastructure/adaptres/repositories/CompanyRepository";
-import { DealerRepository } from "../../../infrastructure/adaptres/repositories/DealerRepository";
-import { UserRepository } from "../../../infrastructure/adaptres/repositories/UserRepository";
-import { HashService } from "../../../infrastructure/adaptres/services/HashService";
-import { CommandHandler } from "../CommandBus";
-import { UpdateUserCommand } from "../commands/UpdateUserCommand";
+import { Company } from "../../../../domain/entities/Company";
+import { Dealer } from "../../../../domain/entities/Dealer";
+import { User } from "../../../../domain/entities/User";
+import { Email } from "../../../../domain/value-objects/Email";
+import { Password } from "../../../../domain/value-objects/Password";
+import { UserType } from "../../../../domain/value-objects/UserType";
+import { CompanyRepository } from "../../../../infrastructure/adaptres/repositories/CompanyRepository";
+import { DealerRepository } from "../../../../infrastructure/adaptres/repositories/DealerRepository";
+import { UserRepository } from "../../../../infrastructure/adaptres/repositories/UserRepository";
+import { HashService } from "../../../../infrastructure/adaptres/services/HashService";
+import { CommandHandler } from "../../CommandBus";
+import { UpdateUserCommand } from "../../commands/User-Commands/UpdateUserCommand";
 
 
 export class UpdateUserCommandHandler implements CommandHandler<UpdateUserCommand> {

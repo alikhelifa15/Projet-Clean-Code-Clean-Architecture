@@ -1,6 +1,6 @@
-import { GetMotorcycleQuery } from '../queries/GetMotorcycleQuery';
-import MotorcycleMongo from '../../../infrastructure/database/mongodb/models/motorcycle';
-import { connectDB } from '../../../infrastructure/database/mongodb/models';
+import { GetMotorcycleQuery } from '../../queries/Motorocycle-queries/GetMotorcycleQuery';
+import MotorcycleMongo from '../../../../infrastructure/database/mongodb/models/motorcycle';
+import { connectDB } from '../../../../infrastructure/database/mongodb/models';
 
 export class GetMotorcycleQueryHandler {
   async execute(query: GetMotorcycleQuery) {

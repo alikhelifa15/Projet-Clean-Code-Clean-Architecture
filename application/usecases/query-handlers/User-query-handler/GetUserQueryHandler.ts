@@ -1,10 +1,10 @@
-import { GetUserQuery } from '../queries/GetUserQuery';
-import { User } from '../../../domain/entities/User';
-import UserMongo from '../../../infrastructure/database/mongodb/models/user';
-import { connectDB } from '../../../infrastructure/database/mongodb/models';
-import { Email } from '../../../domain/value-objects/Email';
-import { Password } from '../../../domain/value-objects/Password';
-import { UserType } from '../../../domain/value-objects/UserType';
+import { GetUserQuery } from '../../queries/User-queries/GetUserQuery';
+import { User } from '../../../../domain/entities/User';
+import UserMongo from '../../../../infrastructure/database/mongodb/models/user';
+import { connectDB } from '../../../../infrastructure/database/mongodb/models';
+import { Email } from '../../../../domain/value-objects/Email';
+import { Password } from '../../../../domain/value-objects/Password';
+import { UserType } from '../../../../domain/value-objects/UserType';
 
 export class GetUserQueryHandler {
   async execute(query: GetUserQuery): Promise<User | null> {

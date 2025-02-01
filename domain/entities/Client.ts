@@ -7,7 +7,6 @@ export class Client {
 
   constructor(
     public readonly id: number,
-    public readonly userId: number,
     public readonly dealerId: number | null,
     firstName: string,
     lastName: string,

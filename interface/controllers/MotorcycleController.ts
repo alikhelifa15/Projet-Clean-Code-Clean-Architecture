@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { CommandBus } from '../../application/usecases/CommandBus';
-import { CreateMotorcycleCommand } from '../../application/usecases/commands/CreateMotorcycleCommand';
-import { UpdateMotorcycleCommand } from '../../application/usecases/commands/UpdateMotorcycleCommand';
-import { DeleteMotorcycleCommand } from '../../application/usecases/commands/DeleteMotorcycleCommand';
+import { CreateMotorcycleCommand } from '../../application/usecases/commands/Motorcycle-Commands/CreateMotorcycleCommand';
+import { UpdateMotorcycleCommand } from '../../application/usecases/commands/Motorcycle-Commands/UpdateMotorcycleCommand';
+import { DeleteMotorcycleCommand } from '../../application/usecases/commands/Motorcycle-Commands/DeleteMotorcycleCommand';
 
 export class MotorcycleController {
   constructor(private commandBus: CommandBus) {}

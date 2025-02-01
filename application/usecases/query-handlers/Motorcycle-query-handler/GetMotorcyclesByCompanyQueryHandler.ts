@@ -1,7 +1,6 @@
-// application/usecases/query-handlers/GetMotorcyclesByCompanyQueryHandler.ts
-import { connectDB } from '../../../infrastructure/database/mongodb/models';
-import MotorcycleMongo from '../../../infrastructure/database/mongodb/models/motorcycle';
-import { GetMotorcyclesByCompanyQuery } from '../queries/GetMotorcyclesByCompanyQuery';
+import { connectDB } from '../../../../infrastructure/database/mongodb/models';
+import MotorcycleMongo from '../../../../infrastructure/database/mongodb/models/motorcycle';
+import { GetMotorcyclesByCompanyQuery } from '../../queries/Motorocycle-queries/GetMotorcyclesByCompanyQuery';
 
 export class GetMotorcyclesByCompanyQueryHandler {
   async execute(query: GetMotorcyclesByCompanyQuery) {

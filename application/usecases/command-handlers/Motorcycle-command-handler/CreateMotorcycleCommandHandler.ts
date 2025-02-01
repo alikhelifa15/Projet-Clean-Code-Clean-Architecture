@@ -1,7 +1,7 @@
-import { CommandHandler } from '../CommandBus';
-import { CreateMotorcycleCommand } from '../commands/CreateMotorcycleCommand';
-import { Motorcycle } from '../../../domain/entities/Motorcycle';
-import { MotorcycleRepository } from '../../../application/repositories/MotorcycleRepository';
+import { CommandHandler } from '../../CommandBus';
+import { CreateMotorcycleCommand } from '../../commands/Motorcycle-Commands/CreateMotorcycleCommand';
+import { Motorcycle } from '../../../../domain/entities/Motorcycle';
+import { MotorcycleRepository } from '../../../repositories/MotorcycleRepository';
 
 export class CreateMotorcycleCommandHandler implements CommandHandler<CreateMotorcycleCommand> {
   constructor(

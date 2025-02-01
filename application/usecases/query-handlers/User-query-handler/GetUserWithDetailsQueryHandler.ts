@@ -1,18 +1,18 @@
-import { GetUserWithDetailsQuery } from '../queries/GetUserWithDetailsQuery';
-import { User } from '../../../domain/entities/User';
-import { Company } from '../../../domain/entities/Company';
-import { Dealer } from '../../../domain/entities/Dealer';
-import UserMongo from '../../../infrastructure/database/mongodb/models/user';
-import CompanyMongo from '../../../infrastructure/database/mongodb/models/company';
-import DealerMongo from '../../../infrastructure/database/mongodb/models/dealer';
-import { connectDB } from '../../../infrastructure/database/mongodb/models';
-import { Email } from '../../../domain/value-objects/Email';
-import { Password } from '../../../domain/value-objects/Password';
-import { UserType } from '../../../domain/value-objects/UserType';
+import { GetUserWithDetailsQuery } from '../../queries/User-queries/GetUserWithDetailsQuery';
+import { User } from '../../../../domain/entities/User';
+import { Company } from '../../../../domain/entities/Company';
+import { Dealer } from '../../../../domain/entities/Dealer';
+import UserMongo from '../../../../infrastructure/database/mongodb/models/user';
+import CompanyMongo from '../../../../infrastructure/database/mongodb/models/company';
+import DealerMongo from '../../../../infrastructure/database/mongodb/models/dealer';
+import { connectDB } from '../../../../infrastructure/database/mongodb/models';
+import { Email } from '../../../../domain/value-objects/Email';
+import { Password } from '../../../../domain/value-objects/Password';
+import { UserType } from '../../../../domain/value-objects/UserType';
 import { Types } from 'mongoose';
-import { ICompany } from '../../../infrastructure/database/mongodb/models/company';
-import { IDealer } from '../../../infrastructure/database/mongodb/models/dealer';
-import { IUser } from '../../../infrastructure/database/mongodb/models/user';
+import { ICompany } from '../../../../infrastructure/database/mongodb/models/company';
+import { IDealer } from '../../../../infrastructure/database/mongodb/models/dealer';
+import { IUser } from '../../../../infrastructure/database/mongodb/models/user';
 
 interface UserWithDetails {
   user: User;
