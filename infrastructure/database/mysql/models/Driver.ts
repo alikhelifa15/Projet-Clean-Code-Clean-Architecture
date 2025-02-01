@@ -1,4 +1,4 @@
-import { Column, Model, Table, ForeignKey, DataType } from 'sequelize-typescript';
+import { Column, Model, Table, DataType, ForeignKey, AfterSave, AfterDestroy, AfterUpdate } from 'sequelize-typescript';
 import Company from './Company';
 
 @Table({
@@ -40,12 +40,41 @@ export default class Driver extends Model<Driver> {
 
   @Column({
     type: DataType.STRING(255),
+    allowNull: true,
   })
-  experience?: string;
+  experience!: string;
 
   @Column({
     type: DataType.STRING(20),
     allowNull: false,
   })
   status!: string;
+
+  // Hooks after save, update, and destroy if you need MongoDB sync like in the User model
+  @AfterSave
+  static async saveToMongo(driver: Driver) {
+    try {
+      console.log('Driver saved to MongoDB or do your other operations');
+    } catch (err) {
+      console.error('Error saving driver to MongoDB:', err);
+    }
+  }
+
+  @AfterDestroy
+  static async deleteFromMongo(driver: Driver) {
+    try {
+      console.log('Driver deleted from MongoDB or do your other operations');
+    } catch (err) {
+      console.error('Error deleting driver from MongoDB:', err);
+    }
+  }
+
+  @AfterUpdate
+  static async updateMongo(driver: Driver) {
+    try {
+      console.log('Driver updated in MongoDB or do your other operations');
+    } catch (err) {
+      console.error('Error updating driver in MongoDB:', err);
+    }
+  }
 }
