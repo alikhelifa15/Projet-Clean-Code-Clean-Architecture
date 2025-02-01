@@ -5,7 +5,7 @@ import Logo from "../../assets/logoDark.png";
 import { FaBook } from "react-icons/fa6";
 import { FaMotorcycle } from "react-icons/fa6";
 import { MdSportsMotorsports } from "react-icons/md";
-import { BsTools } from "react-icons/bs";
+import { BsFillPeopleFill, BsTools } from "react-icons/bs";
 import { GrWorkshop } from "react-icons/gr";
 import { RiFileCheckFill } from "react-icons/ri";
 interface SidebarProps {
@@ -281,6 +281,21 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 >
                   <BsTools/>
                   Pièces
+                </NavLink>
+              </li>
+              {/* <!-- Menu Item parts --> */}
+
+
+                {/* <!-- Menu Item parts --> */}
+                <li>
+                <NavLink
+                  to="/dashboard/client"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    pathname.includes("parts") && "bg-graydark dark:bg-meta-4"
+                  }`}
+                >
+                  <BsFillPeopleFill />
+                  Clients
                 </NavLink>
               </li>
               {/* <!-- Menu Item parts --> */}

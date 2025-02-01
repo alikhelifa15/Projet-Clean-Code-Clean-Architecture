@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { CommandBus } from "../../application/usecases/CommandBus";
-import { LoginCommand } from "../../application/usecases/commands/LoginCommand";
-import { SignUpCommand } from "../../application/usecases/commands/SignUpCommand";
-import { UpdateUserCommand } from "../../application/usecases/commands/UpdateUserCommand";
-import { DeleteUserCommand } from "../../application/usecases/commands/DeleteUserCommand";
+import { LoginCommand } from "../../application/usecases/commands/User-Commands/LoginCommand";
+import { SignUpCommand } from "../../application/usecases/commands/User-Commands/SignUpCommand";
+import { UpdateUserCommand } from "../../application/usecases/commands/User-Commands/UpdateUserCommand";
+import { DeleteUserCommand } from "../../application/usecases/commands/User-Commands/DeleteUserCommand";
 
 export class UserController {
   constructor(private commandBus: CommandBus) {}

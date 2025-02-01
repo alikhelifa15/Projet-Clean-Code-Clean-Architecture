@@ -18,6 +18,7 @@ import WorkshopControls from "../pages/dashboard/WorkshopControls";
 import WorkshopMaintenance from "../pages/dashboard/WorkshopMaintenance";
 import Profile from "../pages/dashboard/Profile";
 import Users from "../pages/dashboard/Users";
+import Client from "../pages/dashboard/Client";
 import ServiceBook from "../pages/dashboard/ServiceBook";
 import CustomerBase from "../pages/dashboard/CustomerBase";
 import Parts from "../pages/dashboard/Parts";
@@ -81,6 +82,8 @@ function App() {
         <Route path="/dashboard/profile" element={wrapPage("Profile", <Profile />, true, ["ADMIN", "DEALER", "COMPANY"])} />
         <Route path="/dashboard/users" element={wrapPage("Utilisateurs", <Users />, true, ["ADMIN"])} />
         <Route path="/dashboard/driver" element={wrapPage("Conducteurs", <Diver />, true, ["DEALER", "COMPANY"])} />
+        <Route path="/dashboard/client" element={wrapPage("Clients", <Client />, true, ["DEALER", "COMPANY"])} />
+
         <Route path="/dashboard/parts" element={wrapPage("Pièces", <Parts />, true, ["DEALER"])} />
         <Route path="/dashboard/workshop/workshop-sheet" element={wrapPage("Fiche moto", <WorkshopSheet />, true, ["DEALER"])} />
         <Route path="/dashboard/workshop/workshop-maintenance" element={wrapPage("Entretien moto", <WorkshopMaintenance />, true, ["DEALER"])} />

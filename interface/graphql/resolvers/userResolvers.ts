@@ -1,7 +1,7 @@
-import { GetAllUsersWithDetailsQuery } from "../../../application/usecases/queries/GetAllUsersWithDetailsQuery";
-import { GetUserWithDetailsQuery } from "../../../application/usecases/queries/GetUserWithDetailsQuery";
-import { GetAllUsersWithDetailsQueryHandler } from "../../../application/usecases/query-handlers/GetAllUsersWithDetailsQueryHandler";
-import { GetUserWithDetailsQueryHandler } from "../../../application/usecases/query-handlers/GetUserWithDetailsQueryHandler";
+import { GetAllUsersWithDetailsQuery } from "../../../application/usecases/queries/User-queries/GetAllUsersWithDetailsQuery";
+import { GetUserWithDetailsQuery } from "../../../application/usecases/queries/User-queries/GetUserWithDetailsQuery";
+import { GetAllUsersWithDetailsQueryHandler } from "../../../application/usecases/query-handlers/User-query-handler/GetAllUsersWithDetailsQueryHandler";
+import { GetUserWithDetailsQueryHandler } from "../../../application/usecases/query-handlers/User-query-handler/GetUserWithDetailsQueryHandler";
 export const userResolvers = {
   user: async (_: unknown, { id, email }: { id?: string; email?: string }) => {
     console.log('Query user with:', { id, email });

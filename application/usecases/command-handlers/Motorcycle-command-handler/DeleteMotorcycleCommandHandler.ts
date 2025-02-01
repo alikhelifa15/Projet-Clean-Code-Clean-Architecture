@@ -1,6 +1,6 @@
-import { MotorcycleRepository } from "../../repositories/MotorcycleRepository";
-import { CommandHandler } from "../CommandBus";
-import { DeleteMotorcycleCommand } from "../commands/DeleteMotorcycleCommand";
+import { MotorcycleRepository } from "../../../repositories/MotorcycleRepository";
+import { CommandHandler } from "../../CommandBus";
+import { DeleteMotorcycleCommand } from "../../commands/Motorcycle-Commands/DeleteMotorcycleCommand";
 export class DeleteMotorcycleCommandHandler implements CommandHandler<DeleteMotorcycleCommand> {
     constructor(
       private motorcycleRepository: MotorcycleRepository

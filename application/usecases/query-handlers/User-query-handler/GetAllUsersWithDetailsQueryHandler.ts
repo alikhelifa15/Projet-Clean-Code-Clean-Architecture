@@ -1,15 +1,15 @@
-import { Company } from '../../../domain/entities/Company';
-import { Dealer } from '../../../domain/entities/Dealer';
-import { User } from '../../../domain/entities/User';
-import { Email } from '../../../domain/value-objects/Email';
-import { Password } from '../../../domain/value-objects/Password';
-import { UserType } from '../../../domain/value-objects/UserType';
-import { connectDB } from '../../../infrastructure/database/mongodb/models';
-import CompanyMongo from '../../../infrastructure/database/mongodb/models/company';
-import DealerMongo from '../../../infrastructure/database/mongodb/models/dealer';
-import UserMongo from '../../../infrastructure/database/mongodb/models/user';
-import { GetAllUsersWithDetailsQuery } from '../queries/GetAllUsersWithDetailsQuery';
-import { ICompany } from '../../../infrastructure/database/mongodb/models/company';
+import { Company } from '../../../../domain/entities/Company';
+import { Dealer } from '../../../../domain/entities/Dealer';
+import { User } from '../../../../domain/entities/User';
+import { Email } from '../../../../domain/value-objects/Email';
+import { Password } from '../../../../domain/value-objects/Password';
+import { UserType } from '../../../../domain/value-objects/UserType';
+import { connectDB } from '../../../../infrastructure/database/mongodb/models';
+import CompanyMongo from '../../../../infrastructure/database/mongodb/models/company';
+import DealerMongo from '../../../../infrastructure/database/mongodb/models/dealer';
+import UserMongo from '../../../../infrastructure/database/mongodb/models/user';
+import { GetAllUsersWithDetailsQuery } from '../../queries/User-queries/GetAllUsersWithDetailsQuery';
+import { ICompany } from '../../../../infrastructure/database/mongodb/models/company';
 
 export interface UserWithDetails {
     user: User;

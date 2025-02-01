@@ -1,8 +1,8 @@
-import { CompanyRepository } from "../../../infrastructure/adaptres/repositories/CompanyRepository";
-import { DealerRepository } from "../../../infrastructure/adaptres/repositories/DealerRepository";
-import { UserRepository } from "../../../infrastructure/adaptres/repositories/UserRepository";
-import { CommandHandler } from "../CommandBus";
-import { DeleteUserCommand } from "../commands/DeleteUserCommand";
+import { CompanyRepository } from "../../../../infrastructure/adaptres/repositories/CompanyRepository";
+import { DealerRepository } from "../../../../infrastructure/adaptres/repositories/DealerRepository";
+import { UserRepository } from "../../../../infrastructure/adaptres/repositories/UserRepository";
+import { CommandHandler } from "../../CommandBus";
+import { DeleteUserCommand } from "../../commands/User-Commands/DeleteUserCommand";
 
 export class DeleteUserCommandHandler implements CommandHandler<DeleteUserCommand> {
     constructor(

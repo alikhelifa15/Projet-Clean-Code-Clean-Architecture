@@ -1,11 +1,11 @@
-import { GetAllMotorcyclesQueryHandler } from '../../../application/usecases/query-handlers/GetAllMotorcyclesQueryHandler';
-import { GetMotorcycleQueryHandler } from '../../../application/usecases/query-handlers/GetMotorcycleQueryHandler';
-import { GetAllMotorcyclesQuery } from '../../../application/usecases/queries/GetAllMotorcyclesQuery';
-import { GetMotorcycleQuery } from '../../../application/usecases/queries/GetMotorcycleQuery';
-import { GetMotorcyclesByDealerQueryHandler } from '../../../application/usecases/query-handlers/GetMotorcyclesByDealerQueryHandler';
-import { GetMotorcyclesByDealerQuery } from '../../../application/usecases/queries/GetMotorcyclesByDealerQuery';
-import { GetMotorcyclesByCompanyQueryHandler } from '../../../application/usecases/query-handlers/GetMotorcyclesByCompanyQueryHandler';
-import { GetMotorcyclesByCompanyQuery } from '../../../application/usecases/queries/GetMotorcyclesByCompanyQuery';
+import { GetAllMotorcyclesQueryHandler } from '../../../application/usecases/query-handlers/Motorcycle-query-handler/GetAllMotorcyclesQueryHandler';
+import { GetMotorcycleQueryHandler } from '../../../application/usecases/query-handlers/Motorcycle-query-handler/GetMotorcycleQueryHandler';
+import { GetAllMotorcyclesQuery } from '../../../application/usecases/queries/Motorocycle-queries/GetAllMotorcyclesQuery';
+import { GetMotorcycleQuery } from '../../../application/usecases/queries/Motorocycle-queries/GetMotorcycleQuery';
+import { GetMotorcyclesByDealerQueryHandler } from '../../../application/usecases/query-handlers/Motorcycle-query-handler/GetMotorcyclesByDealerQueryHandler';
+import { GetMotorcyclesByDealerQuery } from '../../../application/usecases/queries/Motorocycle-queries/GetMotorcyclesByDealerQuery';
+import { GetMotorcyclesByCompanyQueryHandler } from '../../../application/usecases/query-handlers/Motorcycle-query-handler/GetMotorcyclesByCompanyQueryHandler';
+import { GetMotorcyclesByCompanyQuery } from '../../../application/usecases/queries/Motorocycle-queries/GetMotorcyclesByCompanyQuery';
 
 export const motorcycleResolvers = {
     motorcycle: async (_: unknown, { id }: { id: string }) => {
