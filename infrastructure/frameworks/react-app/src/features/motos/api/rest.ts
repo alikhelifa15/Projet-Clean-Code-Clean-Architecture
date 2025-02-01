@@ -6,8 +6,8 @@ export const motorcycleApi = {
         const response = await axiosInstance.post('/api/motorcycles', data);
         return response.data;
     },
-    updateMotorcycle: async (data: MotorcycleData): Promise<MotorcycleResponse> => {
-        const response = await axiosInstance.put(`/api/motorcycles/${data.id}`, data);
+    updateMotorcycle: async (id: string,data: MotorcycleData): Promise<MotorcycleResponse> => {
+        const response = await axiosInstance.put(`/api/motorcycles/${id}`, data);
         return response.data;
     }
 ,

@@ -40,8 +40,11 @@ export class MotorcycleController {
         parseInt(req.params.id),
         req.body.mileage,
         req.body.serialNumber,
-        req.body.photo,
+        req.body.model,
+        req.body.brand,
+        req.body.serviceDate ? new Date(req.body.serviceDate) : undefined,
         req.body.status,
+        req.body.photo,
         req.body.maintenanceInterval
       );
 
