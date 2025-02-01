@@ -22,32 +22,18 @@ import type {
   Motorcycle,
   MotorcycleResponse,
 } from "../../features/motos/types";
-import { jwtDecode, JwtPayload } from "jwt-decode";
 import { useMotorcyclesByCompany } from "../../features/motos/hooks/useMotorcyclesByCompany";
 import ConfirmationPopup from "../../components/Popup/ConfirmationPopup";
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import {  useMutation, useQueryClient } from "@tanstack/react-query";
 import { motorcycleApi } from "../../features/motos/api/rest";
+import MotorcycleForm from "../../features/motos/components/MotorcycleForm";
 import { toast } from "react-toastify";
-interface DecodedToken extends JwtPayload {
-  id: string;
-  email: string;
-  type: { value: string };
-  company: string;
-  dealer: string;
-}
+import { getDecodedToken } from "../../utils";
+
 const MotorcycleList = () => {
-  const decodeToken = localStorage.getItem("token");
-  let infoUser: DecodedToken = {
-    id: "",
-    email: "",
-    type: { value: "" },
-    company: "",
-    dealer: "",
-  };
-  if (decodeToken) {
-    infoUser = jwtDecode<DecodedToken>(decodeToken);
-  }
-  console.log(infoUser);
+   
+  const infoUser = getDecodedToken();
+
   const companyMotorcyclesQuery = useMotorcyclesByCompany(infoUser.id);
   const dealerMotorcyclesQuery = useMotorcyclesByDealer(infoUser.id);
   const [isOpen, setIsOpen] = useState(false);
@@ -59,8 +45,11 @@ const MotorcycleList = () => {
   const { data, isLoading, isError } = motorcyclesQuery;
   const [globalFilter, setGlobalFilter] = useState("");
   const columnHelper = createColumnHelper<Motorcycle>();
+  const [isFormOpen, setIsFormOpen] = useState(false);
+const [formMode, setFormMode] = useState<'add' | 'edit'>('add');
   const [selectedMotorcycle, setSelectedMotorcycle] = useState<Motorcycle | null>(null);
-
+  
+  const queryClient = useQueryClient();
   const getStatusBadgeStyle = (status: string) => {
     switch (status) {
       case "active":
@@ -76,7 +65,7 @@ const MotorcycleList = () => {
   const deleteMutation = useMutation<MotorcycleResponse, Error, string>({
     mutationFn: (motorcycleId: string) => motorcycleApi.deleteMotorcycle(motorcycleId),
     onSuccess: () => {
-      QueryClient.invalidateQueries({ queryKey: ["motorcycles"] });
+      queryClient.invalidateQueries({ queryKey: ["motorcycles"] });
       setIsOpen(false);
     },
   });
@@ -87,7 +76,7 @@ const MotorcycleList = () => {
   const confirmDelete = () => {
     if (selectedMotorcycle) {
       toast.promise(
-        deleteMutation.mutateAsync(selectedMotorcycle.id ),
+        deleteMutation.mutateAsync(selectedMotorcycle.id.toString()),
         {
           pending: 'Suppression en cours...',
           success: 'Moto supprimée avec succès',
@@ -164,7 +153,12 @@ const MotorcycleList = () => {
           <div className="flex gap-2 justify-center">
             <BsPencil 
               className="h-5 w-5 hover:text-primary cursor-pointer" 
-              onClick={() => handleEdit(motorcycle)}
+              onClick={() => {
+                setSelectedMotorcycle(motorcycle);
+                setFormMode('edit');
+                setIsFormOpen(true);
+              }}
+              
             />
             <BsTrash2 
               className="h-5 w-5 hover:text-primary cursor-pointer" 
@@ -207,6 +201,12 @@ const MotorcycleList = () => {
 
   return (
     <div className="p-4">
+      <MotorcycleForm
+      isOpen={isFormOpen}
+      onClose={() => setIsFormOpen(false)}
+      motorcycle={selectedMotorcycle || undefined}
+      mode={formMode}
+    />
         <ConfirmationPopup
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
@@ -226,7 +226,11 @@ const MotorcycleList = () => {
             />
           </div>
           <Button
-            onClick={() => {}}
+          onClick={() => {
+            setFormMode('add');
+            setSelectedMotorcycle(null);
+            setIsFormOpen(true);
+          }}
             to="#"
             title="Ajouter une moto"
             className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-btn-primary py-2 px-2 text-center text-white hover:bg-opacity-90 lg:px-6 xl:px-8"

@@ -1,8 +1,7 @@
 export interface MotorcycleData {
   id: string;
-  companyId: string;
-  dealerId: string;
-  modelId: string;
+  brand: string;
+  model: string;
   serialNumber: string;
   photo: string;
   mileage: number;

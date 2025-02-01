@@ -12,21 +12,19 @@ export class UpdateMotorcycleCommandHandler implements CommandHandler<UpdateMoto
       if (!existingMotorcycle) {
         throw new Error('Motorcycle not found');
       }
-  
-      const updatedMotorcycle = new Motorcycle(
-        existingMotorcycle.id,
-        existingMotorcycle.companyId,
-        existingMotorcycle.dealerId,
-        existingMotorcycle.model,
-        existingMotorcycle.brand,
-        existingMotorcycle.serialNumber,
-        command.photo ?? existingMotorcycle.photo,
-        command.mileage ?? existingMotorcycle.mileage,
-        command.serviceDate ?? existingMotorcycle.serviceDate,
-        command.status ?? existingMotorcycle.status,
-        command.maintenanceInterval ?? existingMotorcycle.maintenanceInterval
-      );
-  
+   const updatedMotorcycle = new Motorcycle(
+    existingMotorcycle.id,
+    existingMotorcycle.companyId,
+    existingMotorcycle.dealerId,
+    command.model ?? existingMotorcycle.model,  
+    command.brand ?? existingMotorcycle.brand, 
+    command.serialNumber ?? existingMotorcycle.serialNumber,
+    command.photo ?? existingMotorcycle.photo,
+    command.mileage ?? existingMotorcycle.mileage,
+    command.serviceDate ?? existingMotorcycle.serviceDate,
+    command.status ?? existingMotorcycle.status,
+    command.maintenanceInterval ?? existingMotorcycle.maintenanceInterval
+  );
       return this.motorcycleRepository.update(updatedMotorcycle);
     }
   }

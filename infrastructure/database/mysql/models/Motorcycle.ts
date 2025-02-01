@@ -47,13 +47,11 @@ export default class Motorcycle extends Model<Motorcycle> {
   @Column({
     type: DataType.STRING(255),
     allowNull: false,
-    unique: true,
   })
   brand!: string;
   @Column({
     type: DataType.STRING(255),
     allowNull: false,
-    unique: true,
   })
   model!: string;
   @Column({

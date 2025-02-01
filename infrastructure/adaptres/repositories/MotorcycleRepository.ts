@@ -1,6 +1,6 @@
-import { MotorcycleRepository as IMotorcycleRepository } from '../../../application/repositories/MotorcycleRepository';
-import { Motorcycle } from '../../../domain/entities/Motorcycle';
-import MotorcycleModel from '../../database/mysql/models/Motorcycle';
+import { MotorcycleRepository as IMotorcycleRepository } from "../../../application/repositories/MotorcycleRepository";
+import { Motorcycle } from "../../../domain/entities/Motorcycle";
+import MotorcycleModel from "../../database/mysql/models/Motorcycle";
 
 export class MotorcycleRepository implements IMotorcycleRepository {
   async save(motorcycle: Motorcycle): Promise<Motorcycle> {
@@ -91,31 +91,37 @@ export class MotorcycleRepository implements IMotorcycleRepository {
         motorcycle.maintenance_interval
       );
     });
-  } 
+  }
 
   async update(motorcycle: Motorcycle): Promise<Motorcycle> {
     if (!motorcycle.id) {
-      throw new Error('Motorcycle ID is required for update');
-    }  
+      throw new Error("Motorcycle ID is required for update");
+    }
     const instance = await MotorcycleModel.findByPk(motorcycle.id);
     if (!instance) {
       throw new Error(`Motorcycle with id ${motorcycle.id} not found`);
     }
-      await instance.update({
+    console.log(motorcycle);
+    await instance.update({
+      brand: motorcycle.brand,
+      model: motorcycle.model,
+      serial_number: motorcycle.serialNumber,
+      photo: motorcycle.photo,
+
       mileage: motorcycle.mileage,
       service_date: motorcycle.serviceDate,
       status: motorcycle.status,
       maintenance_interval: motorcycle.maintenanceInterval,
     });
-  
+
     return motorcycle;
   }
 
   async delete(id: number): Promise<void> {
-        const instance = await MotorcycleModel.findByPk(id);
+    const instance = await MotorcycleModel.findByPk(id);
     if (!instance) {
       throw new Error(`Motorcycle with id ${id} not found`);
     }
-      await instance.destroy();
+    await instance.destroy();
   }
 }
