@@ -6,7 +6,7 @@ import { Part } from '../../../../domain/entities/Part';
 export class DeletePartCommandHandler implements CommandHandler<DeletePartCommand> {
   constructor(private partsRepository: PartRepository) {}
 
-  async execute(command: DeletePartCommand): Promise<boolean> {
+  async execute(command: DeletePartCommand): Promise<void> {
     return this.partsRepository.delete(command.id);
   }
 }

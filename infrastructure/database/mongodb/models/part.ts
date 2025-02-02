@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 interface IPart extends Document {
+  id: number;
   reference: string;
   name: string;
   description?: string;
@@ -10,6 +11,11 @@ interface IPart extends Document {
 }
 
 const PartSchema: Schema = new Schema({
+  id: {
+    type: Number,
+    required: true,
+    unique: true,
+  },
   reference: {
     type: String,
     required: true,
