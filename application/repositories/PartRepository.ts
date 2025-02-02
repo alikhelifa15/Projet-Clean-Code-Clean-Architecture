@@ -5,5 +5,5 @@ export interface PartRepository {
   findById(id: number): Promise<Part | null>;
   findAll(): Promise<Part[]>;
   update(id: number, parts: Partial<Part>): Promise<Part | null>;
-  delete(id: number): Promise<boolean>;
+  delete(id: number): Promise<void>;
 }
