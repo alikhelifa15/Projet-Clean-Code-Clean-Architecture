@@ -229,23 +229,6 @@ const DriverForm: React.FC<DriverFormProps> = ({
               </select>
             </div>
 
-            {/* Société */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Société
-              </label>
-              <select
-                name="companyId"
-                value={formData.companyId}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 p-2"
-                required
-              >
-                {/* Les options de sociétés doivent être ajoutées dynamiquement, selon la logique de ton application */}
-                <option value="">Sélectionner une société</option>
-                {/* Ajouter ici les options de sociétés */}
-              </select>
-            </div>
           </div>
 
           {/* Boutons d'action */}

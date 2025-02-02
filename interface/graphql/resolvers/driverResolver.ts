@@ -17,6 +17,7 @@ export const driverResolvers = {
         firstName: result.firstName,
         lastName: result.lastName,
         licenseNumber: result.licenseNumber,
+        licenseDate: result.licenseDate?.toISOString(),
         experience: result.experience,
         status: result.status,
       };
@@ -30,32 +31,23 @@ export const driverResolvers = {
         firstName: result.firstName,
         lastName: result.lastName,
         licenseNumber: result.licenseNumber,
+        licenseDate: result.licenseDate?.toISOString(),
         experience: result.experience,
         status: result.status,
       }));
     },
-    // driversByDealer: async (_: unknown, { dealerId }: { dealerId: string }) => {
-    //   const handler = new GetDriversByDealerQueryHandler();
-    //   const results = await handler.execute(new GetDriversByDealerQuery(dealerId));
-    //   return results.map(result => ({
-    //     id: result.id,
-    //     companyId: result.companyId,
-    //     firstName: result.firstName,
-    //     lastName: result.lastName,
-    //     licenseNumber: result.licenseNumber,
-    //     experience: result.experience,
-    //     status: result.status,
-    //   }));
-    // },
-    driversByCompany: async (_: unknown, { companyId }: { companyId: string }) => {
+   
+    driversByCompany: async (_: unknown, { companyId }: { companyId: number }) => {
       const handler = new GetDriverByCompanyQueryHandler();
       const results = await handler.execute(new GetDriverByCompanyQuery(companyId));
+      console.log("🚀 Résultats de la base :", results);
       return results.map(result => ({
         id: result.id,
         companyId: result.companyId,
         firstName: result.firstName,
         lastName: result.lastName,
         licenseNumber: result.licenseNumber,
+        licenseDate: result.licenseDate?.toISOString(),
         experience: result.experience,
         status: result.status,
       }));

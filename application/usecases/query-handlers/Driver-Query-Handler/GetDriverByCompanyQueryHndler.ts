@@ -6,7 +6,7 @@ export class GetDriverByCompanyQueryHandler {
   async execute(query: GetDriverByCompanyQuery) {
     try {
       await connectDB();
-      const drivers = await DriverMongo.find({ company_id: parseInt(query.companyId) });
+      const drivers = await DriverMongo.find({ companyId: query.companyId });
       return drivers;
     } catch (error) {
       console.error("Error in GetAllDriversQueryHandler:", error);

@@ -1,3 +1,3 @@
 export class GetDriverByCompanyQuery {
-    constructor(public readonly companyId: string) {}
+    constructor(public readonly companyId: number) {}
   }

@@ -1,12 +1,18 @@
 export const driverTypeDefs = `
+  extend type Query {
+    driver(id: ID!): Driver
+    drivers: [Driver!]!
+    driversByCompany(companyId: ID!): [Driver!]!
+  }
+
   type Driver {
     id: ID!
     companyId: ID
-    dealerId: ID
     firstName: String!
     lastName: String!
     licenseNumber: String!
-    vehicleId: ID!
+    licenseDate: String! 
+    experience: String
     status: String!
   }
 `;

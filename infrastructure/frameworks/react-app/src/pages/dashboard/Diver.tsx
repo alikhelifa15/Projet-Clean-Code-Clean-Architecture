@@ -8,22 +8,104 @@ import {
   getSortedRowModel,
   ColumnDef,
 } from "@tanstack/react-table";
+import { useDriversByCompany } from "../../features/driver/hooks/useDriversByCompany";
 import DriverForm from "../../features/driver/components/DriverForm";
+import Loader from "../../components/Loader";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import { BsPencil, BsTrash2 } from "react-icons/bs";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
 import Button from "../../components/Button/Button";
+import type {
+  GetDriversByCompanyData,
+  Driver as DriverType,
+} from "../../features/driver/types";
 import { Driver } from "../../features/driver/types";
 import { getDecodedToken } from "../../utils";
 
 const DiverList = () => {
   const infoUser = getDecodedToken();
+  const driverByCompany = useDriversByCompany(infoUser.id);
+
+  const { data, isLoading, isError } = driverByCompany;
+  const [globalFilter, setGlobalFilter] = useState("");
+  const columnHelper = createColumnHelper<DriverType>();
   const [isOpen, setIsOpen] = useState(false);
   const [formMode, setFormMode] = useState<"add" | "edit">("add");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
+
+  const columns = [
+    {
+      accessorKey: "firstName",
+      header: "Nom",
+      cell: ({ row }) => `${row.original.firstName} ${row.original.lastName}`,
+    },
+    {
+      accessorKey: "licenseNumber",
+      header: "Numéro de permis",
+      cell: (info: any) => info.getValue(),
+    },
+    {
+      accessorKey: "licenseDate",
+      header: "Date de permis",
+      cell: (info: any) => info.getValue()  ,
+    },
+    {
+      accessorKey: "experience",
+      header: "Expérience",
+      cell: (info: any) => `${info.getValue()} ans`,
+    },
+    {
+      accessorKey: "actions",
+      header: "Actions",
+      cell: ( { row: { original: Driver } }) => (
+        <div className="flex gap-2">
+          <BsPencil 
+              className="h-5 w-5 hover:text-primary cursor-pointer" 
+              onClick={() => {
+                setSelectedDriver(Driver);
+                setFormMode('edit');
+                setIsFormOpen(true);
+              }}
+              
+            />
+            <BsTrash2 
+              className="h-5 w-5 hover:text-primary cursor-pointer" 
+              //onClick={() => handleDelete(driver)}
+            />
+        </div>
+      ),
+    },
+  ];
+
+  const table = useReactTable({
+    data:
+      infoUser.type.value === "COMPANY"
+        ? (data as GetDriversByCompanyData )?.driversByCompany || []
+        :  [],
+    columns,
+    state: { globalFilter },
+    onGlobalFilterChange: setGlobalFilter,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    initialState: {
+      pagination: { pageSize: 5 },
+    },
+  });
+
+  if (isLoading) return <Loader />;
+  if (isError) {
+    return (
+      <div className="p-4 text-red-500 bg-red-50 rounded-lg border border-red-200">
+        Une erreur est survenue lors du chargement des données
+      </div>
+    );
+  }
+
 
   return (
     <div className="p-4">
@@ -56,6 +138,64 @@ const DiverList = () => {
             icon={<GiFullMotorcycleHelmet />}
           />
         </div>
+
+           {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="min-w-full">
+            <thead className="border border-gray">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id} className="border-gray">
+                  {headerGroup.headers.map((header) => (
+                    <th key={header.id} className="px-6 py-3">
+                      <div className="flex flex-col">
+                        <div
+                          className="flex items-center justify-between cursor-pointer"
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          <span className="text-xs font-semibold text-gray-500 uppercase">
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                          </span>
+                          <span className="ml-2">
+                            {header.column.getIsSorted() === "asc" ? (
+                              <FaSortUp className="h-4 w-4" />
+                            ) : header.column.getIsSorted() === "desc" ? (
+                              <FaSortDown className="h-4 w-4" />
+                            ) : (
+                              <FaSort className="h-4 w-4 text-gray-400" />
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody className="bg-white">
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id} className="hover:bg-gray-2 border-gray">
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="px-6 py-4 whitespace-nowrap text-sm text-[#999999]"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+
+
      </div>  
   </div>  
   );
