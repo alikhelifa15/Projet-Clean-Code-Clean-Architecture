@@ -17,7 +17,6 @@ export default class Part extends Model<Part> {
   @Column({
     type: DataType.STRING(255),
     allowNull: false,
-    unique: true,
   })
   reference!: string;
 
