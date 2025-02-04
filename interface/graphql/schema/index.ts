@@ -14,10 +14,15 @@ export const schema = `
   ${clientTypeDefs}
 
   ${driverTypeDefs}
+
   ${partTypeDefs}
 
    ${testTypeDefs}
  ${incidentTypeDefs}
+
+  ${testTypeDefs}
+  ${incidentTypeDefs}
+
 
 
   type Query {
