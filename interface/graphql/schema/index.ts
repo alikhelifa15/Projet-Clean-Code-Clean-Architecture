@@ -1,6 +1,7 @@
 import { userTypeDefs } from './userSchema';
 import { motorcycleTypeDefs } from './motorcycleSchema';
 import { clientTypeDefs } from './clientSchema';
+import { driverTypeDefs } from './driverSchema';
 import { testTypeDefs } from './testSchema';
 import { incidentTypeDefs } from './incidentSchema';
 
@@ -8,6 +9,7 @@ export const schema = `
   ${userTypeDefs}
   ${motorcycleTypeDefs}
   ${clientTypeDefs}
+  ${driverTypeDefs}
    ${testTypeDefs}
  ${incidentTypeDefs}
 

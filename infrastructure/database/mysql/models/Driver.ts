@@ -1,6 +1,7 @@
 import { Column, Model, Table, DataType, ForeignKey, AfterSave, AfterDestroy, AfterUpdate } from 'sequelize-typescript';
 import Company from './Company';
-
+import DriverMongo from "../../mongodb/models/driver";
+import { connectDB } from "../../mongodb/models";
 @Table({
   tableName: 'driver',
   timestamps: false,
@@ -50,31 +51,61 @@ export default class Driver extends Model<Driver> {
   })
   status!: string;
 
-  // Hooks after save, update, and destroy if you need MongoDB sync like in the User model
   @AfterSave
   static async saveToMongo(driver: Driver) {
     try {
-      console.log('Driver saved to MongoDB or do your other operations');
+      await connectDB();
+
+      const newDriver = new DriverMongo({
+        id: driver.id,
+        companyId: driver.company_id,
+        firstName: driver.first_name,
+        lastName: driver.last_name,
+        licenseNumber: driver.license_number,
+        licenseDate: driver.license_date,
+        experience: driver.experience,
+        status: driver.status,
+      });
+
+      await newDriver.save();
+      console.log("🚀 Driver enregistré dans MongoDB avec succès !");
     } catch (err) {
-      console.error('Error saving driver to MongoDB:', err);
+      console.error("❌ Erreur lors de l'enregistrement dans MongoDB :", err);
     }
   }
 
   @AfterDestroy
   static async deleteFromMongo(driver: Driver) {
+    console.log("🚨 Suppression du driver avec ID:", driver.id);
     try {
-      console.log('Driver deleted from MongoDB or do your other operations');
+      await connectDB();
+      await DriverMongo.deleteOne({ id: driver.id });
+      console.log("🗑️ Driver supprimé de MongoDB !");
     } catch (err) {
-      console.error('Error deleting driver from MongoDB:', err);
+      console.error("❌ Erreur lors de la suppression dans MongoDB :", err);
     }
   }
 
   @AfterUpdate
   static async updateMongo(driver: Driver) {
     try {
-      console.log('Driver updated in MongoDB or do your other operations');
+      await connectDB();
+      await DriverMongo.updateOne(
+        { id: driver.id },
+        {
+          id: driver.id,
+          companyId: driver.company_id,
+          firstName: driver.first_name,
+          lastName: driver.last_name,
+          licenseNumber: driver.license_number,
+          licenseDate: driver.license_date,
+          experience: driver.experience,
+          status: driver.status,
+        }
+      );
+      console.log("🔄 Driver mis à jour dans MongoDB !");
     } catch (err) {
-      console.error('Error updating driver in MongoDB:', err);
+      console.error("❌ Erreur lors de la mise à jour dans MongoDB :", err);
     }
   }
 }

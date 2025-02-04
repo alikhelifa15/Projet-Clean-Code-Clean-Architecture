@@ -93,8 +93,11 @@ export class PartRepository implements IPartRepository {
   }
 
   // Méthode pour supprimer une pièce
-  async delete(id: number): Promise<boolean> {
-    const deletedCount = await PartModel.destroy({ where: { id } });
-    return deletedCount > 0;
+  async delete(id: number): Promise<void> {
+    const instance = await PartModel.findByPk(id);
+        if (!instance) {
+          throw new Error(`Motorcycle with id ${id} not found`);
+        }
+        await instance.destroy();
   }
 }
