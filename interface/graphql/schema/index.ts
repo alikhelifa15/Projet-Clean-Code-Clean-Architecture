@@ -10,8 +10,8 @@ export const schema = `
   ${motorcycleTypeDefs}
   ${clientTypeDefs}
   ${driverTypeDefs}
-   ${testTypeDefs}
- ${incidentTypeDefs}
+  ${testTypeDefs}
+  ${incidentTypeDefs}
 
   type Query {
     # User queries
