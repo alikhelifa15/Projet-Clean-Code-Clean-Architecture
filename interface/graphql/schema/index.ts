@@ -1,15 +1,24 @@
-import { userTypeDefs } from './userSchema';
-import { motorcycleTypeDefs } from './motorcycleSchema';
-import { clientTypeDefs } from './clientSchema';
-import { driverTypeDefs } from './driverSchema';
-import { partTypeDefs } from './partSchema';
+import { userTypeDefs } from "./userSchema";
+import { motorcycleTypeDefs } from "./motorcycleSchema";
+import { clientTypeDefs } from "./clientSchema";
+
+import { driverTypeDefs } from "./driverSchema";
+import { partTypeDefs } from "./partSchema";
+
+import { testTypeDefs } from "./testSchema";
+import { incidentTypeDefs } from "./incidentSchema";
 
 export const schema = `
   ${userTypeDefs}
   ${motorcycleTypeDefs}
   ${clientTypeDefs}
+
   ${driverTypeDefs}
   ${partTypeDefs}
+
+   ${testTypeDefs}
+ ${incidentTypeDefs}
+
 
   type Query {
     # User queries
@@ -27,5 +36,22 @@ export const schema = `
     client(id: ID!): Client
     clients: [Client!]!
     clientsByDealer(dealerId: ID!): [Client!]!
+
+
+    # Test queries
+   test(id: ID!): Test
+   tests: [Test!]!
+   testsByDriver(driverId: ID!): [Test!]!
+   testsByClient(clientId: ID!): [Test!]!
+   testsByMotorcycle(motorcycleId: ID!): [Test!]!
+   activeTests: [Test!]!
+
+   # Incident queries  
+   incident(id: ID!): Incident
+   incidents: [Incident!]!
+   incidentsByTest(testId: ID!): [Incident!]!
+   incidentsByType(type: String!): [Incident!]!
+   incidentsByCompany(companyId: ID!): [Incident!]!
+   incidentsByDealer(dealerId: ID!): [Incident!]!
   }
 `;
