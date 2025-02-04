@@ -27,6 +27,8 @@ import Home from "../pages/dashboard/Home";
 import RegisterDealer from "../pages/front/RegisterDealer";
 import ProtectedRoute from "./ProtectedRoute";
 import Unauthorized from "../pages/dashboard/Unauthorized";
+import { Test } from "../pages/dashboard/test";
+import { Incident } from "../pages/dashboard/incident";
 
 
 function App() {
@@ -83,6 +85,10 @@ function App() {
         <Route path="/dashboard/users" element={wrapPage("Utilisateurs", <Users />, true, ["ADMIN"])} />
         <Route path="/dashboard/driver" element={wrapPage("Conducteurs", <Diver />, true, ["DEALER", "COMPANY"])} />
         <Route path="/dashboard/client" element={wrapPage("Clients", <Client />, true, ["DEALER", "COMPANY"])} />
+        <Route path="/dashboard/test" element={wrapPage("tests", <Test />, true, ["DEALER", "COMPANY"])} />
+        <Route path="/dashboard/incident" element={wrapPage("incidents", <Incident />, true, ["DEALER", "COMPANY"])} />
+
+
 
         <Route path="/dashboard/parts" element={wrapPage("Pièces", <Parts />, true, ["DEALER"])} />
         <Route path="/dashboard/workshop/workshop-sheet" element={wrapPage("Fiche moto", <WorkshopSheet />, true, ["DEALER"])} />
