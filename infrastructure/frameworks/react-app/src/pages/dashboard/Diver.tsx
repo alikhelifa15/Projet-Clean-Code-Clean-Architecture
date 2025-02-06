@@ -37,48 +37,52 @@ const DiverList = () => {
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
 
   const columns = [
-    {
-      accessorKey: "firstName",
-      header: "Nom",
-      cell: ({ row }) => `${row.original.firstName} ${row.original.lastName}`,
-    },
-    {
-      accessorKey: "licenseNumber",
-      header: "Numéro de permis",
-      cell: (info: any) => info.getValue(),
-    },
-    {
-      accessorKey: "licenseDate",
-      header: "Date de permis",
-      cell: (info: any) => info.getValue()  ,
-    },
-    {
-      accessorKey: "experience",
-      header: "Expérience",
-      cell: (info: any) => `${info.getValue()} ans`,
-    },
-    {
-      accessorKey: "actions",
-      header: "Actions",
-      cell: ( { row: { original: Driver } }) => (
-        <div className="flex gap-2">
-          <BsPencil 
-              className="h-5 w-5 hover:text-primary cursor-pointer" 
-              onClick={() => {
-                setSelectedDriver(Driver);
-                setFormMode('edit');
-                setIsFormOpen(true);
-              }}
-              
-            />
-            <BsTrash2 
-              className="h-5 w-5 hover:text-primary cursor-pointer" 
-              //onClick={() => handleDelete(driver)}
-            />
+  columnHelper.accessor("firstName", {
+    cell: ({ row }) => `${row.original.firstName} ${row.original.lastName}`,
+    header: "Nom",
+    enableSorting: true,
+  }),
+  columnHelper.accessor("licenseNumber", {
+    cell: (info) => info.getValue() || "N/A",
+    header: "Numéro de permis",
+    enableSorting: true,
+  }),
+  columnHelper.accessor("licenseDate", {
+    cell: (info) => info.getValue() || "N/A",
+    header: "Date de permis",
+    enableSorting: true,
+  }),
+  columnHelper.accessor("experience", {
+    cell: (info) => `${info.getValue()} ans`,
+    header: "Expérience",
+    enableSorting: true,
+  }),
+  columnHelper.display({
+    id: "actions",
+    cell: ({ row }) => {
+      const driver = row.original;
+      return (
+        <div className="flex gap-2 justify-center">
+          <BsPencil
+            className="h-5 w-5 hover:text-primary cursor-pointer"
+            onClick={() => {
+              setSelectedDriver(driver);
+              setFormMode("edit");
+              setIsFormOpen(true);
+            }}
+          />
+          <BsTrash2
+            className="h-5 w-5 hover:text-primary cursor-pointer"
+            // onClick={() => handleDelete(driver)}
+          />
         </div>
-      ),
+      );
     },
-  ];
+    header: "Actions",
+    enableSorting: false,
+  }),
+] as ColumnDef<Driver>[];
+
 
   const table = useReactTable({
     data:
@@ -109,22 +113,22 @@ const DiverList = () => {
 
   return (
     <div className="p-4">
-    <DriverForm
+     <DriverForm
       isOpen={isFormOpen}
       onClose={() => setIsFormOpen(false)}
       driver={selectedDriver || undefined}
       mode={formMode}
-    />
+    /> 
     <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="flex flex-row justify-between items-center m-4">
           <div className="relative">
             <CiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <input
-              placeholder="Recherche globale..."
-              value={''}
-              onChange={() => ({})}
-              className="pl-10 w-64 outline-none border rounded-lg py-2 px-4 border-gray"
-            />
+            placeholder="Recherche globale..."
+            value={''}
+            onChange={() => ({})}
+            className="pl-10 w-64 outline-none border rounded-lg py-2 px-4 border-gray"
+          />
           </div>
           <Button
           onClick={() => {

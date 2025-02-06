@@ -26,7 +26,7 @@ export interface PartData {
     unitPrice?: number;
   }
   
-  export interface GetPartsByCompanyData {
-    partsByCompany: Part[];
+  export interface GetPartsByDealerData {
+    partsByDealer: Part[];
   }
   

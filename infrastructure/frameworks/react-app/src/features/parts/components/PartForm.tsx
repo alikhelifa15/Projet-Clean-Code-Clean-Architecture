@@ -55,7 +55,7 @@ interface FormData {
         current_stock: 0,
         alert_threshold: 0,
         unit_price: 0,
-        companyId: user.type.value === "COMPANY" ? user.id : "",
+        companyId: user.type.value === "DEALER" ? user.id : "",
       };
   
       if (mode === "edit" && part) {
@@ -68,7 +68,7 @@ interface FormData {
           alert_threshold: part.alertThreshold ,
           unit_price: part.unitPrice ,
           companyId:
-            user.type.value === "COMPANY" ? user.id : part.companyId.toString(),
+            user.type.value === "DEALER" ? user.id : part.companyId.toString(),
         });
       } else {
         setFormData(initialFormData);
@@ -142,19 +142,7 @@ interface FormData {
     
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                {/* Référence */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Référence</label>
-                  <input
-                    type="text"
-                    name="reference"
-                    value={formData.reference}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border border-gray-300 p-2"
-                    required
-                  />
-                </div>
-    
+
                 {/* Nom */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Nom</label>
@@ -162,6 +150,19 @@ interface FormData {
                     type="text"
                     name="name"
                     value={formData.name}
+                    onChange={handleChange}
+                    className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+                    required
+                  />
+                </div>
+                
+                {/* Référence */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Référence</label>
+                  <input
+                    type="text"
+                    name="reference"
+                    value={formData.reference}
                     onChange={handleChange}
                     className="mt-1 block w-full rounded-md border border-gray-300 p-2"
                     required
