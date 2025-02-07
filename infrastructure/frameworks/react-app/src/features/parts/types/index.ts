@@ -3,9 +3,9 @@ export interface PartData {
     reference: string;
     name: string;
     description?: string;
-    currentStock: number;
-    alertThreshold: number;
-    unitPrice?: number;
+    currentStock: string;
+    alertThreshold: string;
+    unitPrice?: string;
     companyId: string;
   }
   
@@ -21,12 +21,12 @@ export interface PartData {
     reference: string;
     name: string;
     description?: string;
-    currentStock: number;
-    alertThreshold: number;
-    unitPrice?: number;
+    currentStock: string;
+    alertThreshold: string;
+    unitPrice?: string;
   }
   
   export interface GetPartsByDealerData {
-    partsByDealer: Part[];
+    parts: Part[];
   }
   

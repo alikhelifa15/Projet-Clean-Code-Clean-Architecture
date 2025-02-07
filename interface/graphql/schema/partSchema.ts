@@ -10,8 +10,8 @@ export const partTypeDefs = `
     reference: String!
     name: String!
     description: String
-    currentStock: Int!
-    alertThreshold: Int!
-    unitPrice: Float
+    currentStock: String!
+    alertThreshold: String!
+    unitPrice: String
   }
 `;
