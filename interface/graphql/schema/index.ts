@@ -2,12 +2,14 @@ import { userTypeDefs } from './userSchema';
 import { motorcycleTypeDefs } from './motorcycleSchema';
 import { clientTypeDefs } from './clientSchema';
 import { driverTypeDefs } from './driverSchema';
+import { partTypeDefs } from './partSchema';
 
 export const schema = `
   ${userTypeDefs}
   ${motorcycleTypeDefs}
   ${clientTypeDefs}
   ${driverTypeDefs}
+  ${partTypeDefs}
 
   type Query {
     # User queries

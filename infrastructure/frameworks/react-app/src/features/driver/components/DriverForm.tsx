@@ -43,7 +43,7 @@ const DriverForm: React.FC<DriverFormProps> = ({
 
   // Effet pour initialiser/réinitialiser le formulaire
   useEffect(() => {
-    if (!isOpen) return; // Ne rien faire si le modal est fermé
+    if (!isOpen) return; 
 
     const user = getDecodedToken();
     const initialFormData: FormData = {
