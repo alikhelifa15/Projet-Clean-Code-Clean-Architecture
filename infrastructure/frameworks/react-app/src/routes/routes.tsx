@@ -27,7 +27,7 @@ import Home from "../pages/dashboard/Home";
 import RegisterDealer from "../pages/front/RegisterDealer";
 import ProtectedRoute from "./ProtectedRoute";
 import Unauthorized from "../pages/dashboard/Unauthorized";
-import { Test } from "../pages/dashboard/test";
+import Test from "../pages/dashboard/Test";
 import { Incident } from "../pages/dashboard/incident";
 
 
