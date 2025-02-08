@@ -1,14 +1,15 @@
 export class Test {
     constructor(
+      public id: number | null,
       public motorcycleId: number,
-      public driverId: number,
-      public clientId: number,
+      public driverId: number | null,
+      public clientId: number | null,
       public startDate: Date,
       public startingMileage: number,
-      public id?: number,
       public endDate?: Date,
-      public endingMileage?: number,
-      public comments?: string
+      public endingMileage?: number | null,
+      public comments?: string,
+      public status?: string,
     ) {}
   }
   

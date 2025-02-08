@@ -57,6 +57,23 @@ import { DeleteMotorcycleCommand } from '../../../../application/usecases/comman
 import { DeleteMotorcycleCommandHandler } from '../../../../application/usecases/command-handlers/Motorcycle-command-handler/DeleteMotorcycleCommandHandler';
 
 // ======================================
+// Commands & Handlers - Test
+// ======================================
+import { CreateTestCommandHandler } from '../../../../application/usecases/command-handlers/Test-command-handler/CreateTestCommandHandler';
+import { UpdateTestCommandHandler } from '../../../../application/usecases/command-handlers/Test-command-handler/UpdateTestCommandHandler';
+import { DeleteTestCommandHandler } from '../../../../application/usecases/command-handlers/Test-command-handler/DeleteTestCommandHandler';
+
+// ======================================
+// Commands & Handlers - incident
+// ======================================
+import { CreateIncidentCommandHandler } from '../../../../application/usecases/command-handlers/Incident-command-handler/CreateIncidentCommandHandler';
+import { UpdateIncidentCommandHandler } from '../../../../application/usecases/command-handlers/Incident-command-handler/UpdateIncidentCommandHandler';
+import { DeleteIncidentCommandHandler } from '../../../../application/usecases/command-handlers/Incident-command-handler/DeleteIncidentCommandHandler';
+
+
+
+
+// ======================================
 // Commands - Chauffeur
 // ======================================
 import { CreateDriverCommand } from '../../../../application/usecases/commands/Driver-Commands/CreateDriverCommand';
@@ -80,6 +97,20 @@ import { UpdateClientCommand } from '../../../../application/usecases/commands/C
 import { DeleteClientCommand } from '../../../../application/usecases/commands/Client-Commands/DeleteClientCommand';
 
 // ======================================
+// Commands - Test
+// ======================================
+import { CreateTestCommand } from '../../../../application/usecases/commands/Test-Commands/CreateTestCommand';
+import { UpdateTestCommand } from '../../../../application/usecases/commands/Test-Commands/UpdateTestCommand';
+import { DeleteTestCommand } from '../../../../application/usecases/commands/Test-Commands/DeleteTestCommand';
+
+// ======================================
+// Commands - incident
+// ======================================
+import { CreateIncidentCommand } from '../../../../application/usecases/commands/Incident-Commands/CreateIncidentCommand';
+import { UpdateIncidentCommand } from '../../../../application/usecases/commands/Incident-Commands/UpdateIncidentCommand';  
+import { DeleteIncidentCommand } from '../../../../application/usecases/commands/Incident-Commands/DeleteIncidentCommand';
+
+// ======================================
 // Repositories - Couche d'accès aux données
 // ======================================
 import { MotorcycleRepository } from '../../../adaptres/repositories/MotorcycleRepository';
@@ -89,6 +120,8 @@ import { DealerRepository } from '../../../adaptres/repositories/DealerRepositor
 import { DriverRepository } from '../../../adaptres/repositories/DriverRepository';
 import { ClientRepository } from '../../../adaptres/repositories/ClientRepository';
 import { PartRepository } from '../../../adaptres/repositories/PartRepository';
+import { TestRepository } from '../../../adaptres/repositories/TestRepository';
+import { IncidentRepository } from '../../../adaptres/repositories/IncidentRepository';
 
 // ======================================
 // Services - Services d'infrastructure
@@ -104,6 +137,8 @@ import motorcycleRoutes from '../../../../interface/routes/motorcycleRoutes';
 import clientRoutes from '../../../../interface/routes/ClientRoutes';
 import driverRoutes from '../../../../interface/routes/DriverRoutes';
 import partRoutes from '../../../../interface/routes/PartRoutes';
+import testRoutes from '../../../../interface/routes/TestRoutes';
+import incidentRoutes from '../../../../interface/routes/IncidentRoutes';  
 
 // ======================================
 // Command Bus - Bus de commandes CQRS
@@ -132,6 +167,8 @@ const motorcycleRepository = new MotorcycleRepository ();
 const driverRepository = new DriverRepository();
 const partRepository = new PartRepository();
 const clientRepository = new ClientRepository();
+const testRepository = new TestRepository();
+const incidentRepository = new IncidentRepository();
 // Services
 const jwtService = new JwtService();
 const hashService = new HashService();
@@ -167,6 +204,17 @@ commandBus.register(CreateClientCommand, new CreateClientCommandHandler(clientRe
 commandBus.register(UpdateClientCommand, new UpdateClientCommandHandler(clientRepository));
 commandBus.register(DeleteClientCommand, new DeleteClientCommandHandler(clientRepository));
 
+// test Command Handlers
+commandBus.register(CreateTestCommand, new CreateTestCommandHandler(testRepository));
+commandBus.register(UpdateTestCommand, new UpdateTestCommandHandler(testRepository));
+commandBus.register(DeleteTestCommand, new DeleteTestCommandHandler(testRepository));
+// incident Command Handlers
+commandBus.register(CreateIncidentCommand, new CreateIncidentCommandHandler(incidentRepository));
+commandBus.register(UpdateIncidentCommand, new UpdateIncidentCommandHandler(incidentRepository));
+commandBus.register(DeleteIncidentCommand, new DeleteIncidentCommandHandler(incidentRepository));
+
+
+
 // Routes
 app.use('/api', userRoutes(commandBus));
 app.use('/api/motorcycles', motorcycleRoutes(commandBus));
@@ -175,6 +223,8 @@ app.use('/api', driverRoutes(commandBus));
 app.use('/api', partRoutes(commandBus));
 app.use('/api/clients', clientRoutes(commandBus));
 
+app.use('/api/tests', testRoutes(commandBus));
+app.use('/api/incidents', incidentRoutes(commandBus));
 
 app.get('/api/hello', (req: Request, res: Response) => {
   res.send('Hello from Express!');
