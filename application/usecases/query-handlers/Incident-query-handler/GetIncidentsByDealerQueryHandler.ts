@@ -5,30 +5,30 @@ import { GetIncidentsByDealerQuery } from '../../queries/Incident-queries/GetInc
 
 export class GetIncidentsByDealerQueryHandler {
   async execute(query: GetIncidentsByDealerQuery) {
+    if (!query.dealerId) return [];
+
     try {
       await connectDB();
       
-      const motorcycleDealerTests = await TestMongo.find({
+      const tests = await TestMongo.find({
         dealer_id: parseInt(query.dealerId)
-      });
+      }).lean();
 
-      if (!motorcycleDealerTests.length) {
-        return [];
-      }
+      if (!tests?.length) return [];
 
-      const testIds = motorcycleDealerTests.map(test => test.id);
+      const testIds = tests.map(test => test.id);
       const incidents = await IncidentMongo.find({
         test_id: { $in: testIds }
-      }).populate('test_id');
+      }).populate('test_id').lean();
 
-      return incidents.map(incident => ({
-        ...incident.toObject(),
+      return incidents?.map(incident => ({
+        ...incident,
         test: incident.test_id
-      }));
+      })) || [];
 
     } catch (error) {
       console.error('Error in GetIncidentsByDealerQueryHandler:', error);
-      throw error;
+      return [];
     }
   }
 }

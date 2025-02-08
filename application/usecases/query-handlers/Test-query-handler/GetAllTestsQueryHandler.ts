@@ -20,7 +20,15 @@ export class GetAllTestsQueryHandler {
         criteria.motorcycle_id = parseInt(query.motorcycleId);
       }
       
-      const tests = await TestMongo.find(criteria);
+      const tests = await TestMongo.find(criteria)  .populate({
+        path: 'motorcycle_id',
+        model: 'Motorcycle'
+      })
+      .populate({
+        path: 'driver_id',
+        model: 'Driver'
+      })
+      .lean();
       return tests;
     } catch (error) {
       console.error('Error in GetAllTestsQueryHandler:', error);

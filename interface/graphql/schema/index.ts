@@ -36,14 +36,11 @@ export const schema = `
    tests: [Test!]!
    testsByDriver(driverId: ID!): [Test!]!
    testsByClient(clientId: ID!): [Test!]!
-   testsByMotorcycle(motorcycleId: ID!): [Test!]!
-   activeTests: [Test!]!
+   testsByDealer(dealerId: ID!): [Test!]!
+   testsByCompany(companyId: ID!): [Test!]!
 
    # Incident queries  
-   incident(id: ID!): Incident
    incidents: [Incident!]!
-   incidentsByTest(testId: ID!): [Incident!]!
-   incidentsByType(type: String!): [Incident!]!
    incidentsByCompany(companyId: ID!): [Incident!]!
    incidentsByDealer(dealerId: ID!): [Incident!]!
   }

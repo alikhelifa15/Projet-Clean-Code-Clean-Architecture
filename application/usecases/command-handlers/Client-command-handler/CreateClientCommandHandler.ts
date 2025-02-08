@@ -15,6 +15,7 @@ export class CreateClientCommandHandler implements CommandHandler<CreateClientCo
       command.firstName,
       command.lastName,
       command.phone
+      
     );
 
     return await this.clientRepository.save(client);
