@@ -40,7 +40,6 @@ export const driverResolvers = {
     driversByCompany: async (_: unknown, { companyId }: { companyId: number }) => {
       const handler = new GetDriverByCompanyQueryHandler();
       const results = await handler.execute(new GetDriverByCompanyQuery(companyId));
-      console.log("🚀 Résultats de la base :", results);
       return results.map(result => ({
         id: result.id,
         companyId: result.companyId,

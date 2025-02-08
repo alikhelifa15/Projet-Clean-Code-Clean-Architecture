@@ -4,6 +4,7 @@ export class CreateClientCommand {
       public readonly dealerId: number | null,
       public readonly firstName: string,
       public readonly lastName: string,
-      public readonly phone: string | null
+      public readonly phone: string | null,
+    
     ) {}
   }

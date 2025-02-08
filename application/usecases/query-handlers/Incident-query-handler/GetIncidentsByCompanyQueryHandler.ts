@@ -5,30 +5,30 @@ import { GetIncidentsByCompanyQuery } from '../../queries/Incident-queries/GetIn
 
 export class GetIncidentsByCompanyQueryHandler {
   async execute(query: GetIncidentsByCompanyQuery) {
+    if (!query.companyId) return [];
+    
     try {
       await connectDB();
       
-      const motorcycleCompanyTests = await TestMongo.find({
+      const tests = await TestMongo.find({
         company_id: parseInt(query.companyId)
-      });
+      }).lean();
 
-      if (!motorcycleCompanyTests.length) {
-        return [];
-      }
+      if (!tests?.length) return [];
 
-      const testIds = motorcycleCompanyTests.map(test => test.id);
+      const testIds = tests.map(test => test.id);
       const incidents = await IncidentMongo.find({
         test_id: { $in: testIds }
-      }).populate('test_id');
+      }).populate('test_id').lean();
 
-      return incidents.map(incident => ({
-        ...incident.toObject(),
+      return incidents?.map(incident => ({
+        ...incident,
         test: incident.test_id
-      }));
+      })) || [];
 
     } catch (error) {
       console.error('Error in GetIncidentsByCompanyQueryHandler:', error);
-      throw error;
+      return [];
     }
   }
 }
