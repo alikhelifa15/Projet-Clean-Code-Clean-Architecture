@@ -1,10 +1,12 @@
-import { userResolvers } from './userResolvers';
-import { motorcycleResolvers } from './motorcycleResolvers';
-import { clientResolvers } from './clientResolvers';
-import { driverResolvers } from './driverResolver';
-import { partResolvers } from './partResolver';
-import { incidentResolvers } from './incidentResolvers';
-import { testResolvers } from './testResolvers';
+import { userResolvers } from "./userResolvers";
+import { motorcycleResolvers } from "./motorcycleResolvers";
+import { clientResolvers } from "./clientResolvers";
+import { driverResolvers } from "./driverResolver";
+
+import { partResolvers } from "./partResolver";
+
+import { incidentResolvers } from "./incidentResolvers";
+import { testResolvers } from "./testResolvers";
 
 export const resolvers = {
   Query: {
@@ -12,11 +14,8 @@ export const resolvers = {
     ...motorcycleResolvers,
     ...clientResolvers,
     ...driverResolvers,
-
-    ...partResolvers
-
-    ... incidentResolvers,
-    ... testResolvers
-
-  }
+    ...partResolvers,
+    ...incidentResolvers,
+    ...testResolvers,
+  },
 };
