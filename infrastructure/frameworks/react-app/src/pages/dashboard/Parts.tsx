@@ -6,7 +6,7 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
   getSortedRowModel,
-  ColumnDef,
+  
 } from "@tanstack/react-table";
 import PartForm from "../../features/parts/components/PartForm";
 import { useParts } from "../../features/parts/hooks/useParts";

@@ -10,17 +10,9 @@ export const schema = `
   ${userTypeDefs}
   ${motorcycleTypeDefs}
   ${clientTypeDefs}
-
   ${driverTypeDefs}
   ${testTypeDefs}
-  ${incidentTypeDefs}
-
   ${partTypeDefs}
-
-   ${testTypeDefs}
- ${incidentTypeDefs}
-
-  ${testTypeDefs}
   ${incidentTypeDefs}
 
 
