@@ -39,6 +39,12 @@ import { UpdateClientCommandHandler } from '../../../../application/usecases/com
 import { DeleteClientCommandHandler } from '../../../../application/usecases/command-handlers/Client-command-handler/DeleteClientCommandHandler';
 
 // ======================================
+// Command Handlers -Entretien
+// ======================================
+import { CreateMaintenanceHandler } from '../../../../application/usecases/command-handlers/Maintenance-command-handler/CreateMaintenanceCommandHandler';
+import { GetAllMaintenanceHandler } from '../../../../application/usecases/command-handlers/Maintenance-command-handler/GetMaintenanceMotoCommandHandler';
+
+// ======================================
 // Commands - Utilisateur et Authentication
 // ======================================
 import { LoginCommand } from '../../../../application/usecases/commands/User-Commands/LoginCommand';
@@ -97,6 +103,8 @@ import { UpdateClientCommand } from '../../../../application/usecases/commands/C
 import { DeleteClientCommand } from '../../../../application/usecases/commands/Client-Commands/DeleteClientCommand';
 
 // ======================================
+
+
 // Commands - Test
 // ======================================
 import { CreateTestCommand } from '../../../../application/usecases/commands/Test-Commands/CreateTestCommand';
@@ -110,6 +118,16 @@ import { CreateIncidentCommand } from '../../../../application/usecases/commands
 import { UpdateIncidentCommand } from '../../../../application/usecases/commands/Incident-Commands/UpdateIncidentCommand';  
 import { DeleteIncidentCommand } from '../../../../application/usecases/commands/Incident-Commands/DeleteIncidentCommand';
 
+
+
+// Commands - Entretien
+// ======================================
+import { CreateMaintenanceCommand } from '../../../../application/usecases/commands/Maintenance-Commands/CreateMaintenanceCmd';
+import { GetAllMaintenanceCommand } from '../../../../application/usecases/commands/Maintenance-Commands/GetAllMaintenanceMoto';
+
+
+
+
 // ======================================
 // Repositories - Couche d'accès aux données
 // ======================================
@@ -120,8 +138,13 @@ import { DealerRepository } from '../../../adaptres/repositories/DealerRepositor
 import { DriverRepository } from '../../../adaptres/repositories/DriverRepository';
 import { ClientRepository } from '../../../adaptres/repositories/ClientRepository';
 import { PartRepository } from '../../../adaptres/repositories/PartRepository';
+import { MaintenanceRepository } from '../../../adaptres/repositories/MaintenanceRepository';
+import { UsedPartRepository } from '../../../adaptres/repositories/usedPartsRepository';
+
 import { TestRepository } from '../../../adaptres/repositories/TestRepository';
 import { IncidentRepository } from '../../../adaptres/repositories/IncidentRepository';
+
+
 
 // ======================================
 // Services - Services d'infrastructure
@@ -137,8 +160,12 @@ import motorcycleRoutes from '../../../../interface/routes/motorcycleRoutes';
 import clientRoutes from '../../../../interface/routes/ClientRoutes';
 import driverRoutes from '../../../../interface/routes/DriverRoutes';
 import partRoutes from '../../../../interface/routes/PartRoutes';
+import maintenanceRoutes from '../../../../interface/routes/MaintenanceRoutes';
+
 import testRoutes from '../../../../interface/routes/TestRoutes';
 import incidentRoutes from '../../../../interface/routes/IncidentRoutes';  
+
+
 
 // ======================================
 // Command Bus - Bus de commandes CQRS
@@ -167,8 +194,16 @@ const motorcycleRepository = new MotorcycleRepository ();
 const driverRepository = new DriverRepository();
 const partRepository = new PartRepository();
 const clientRepository = new ClientRepository();
+
+
 const testRepository = new TestRepository();
 const incidentRepository = new IncidentRepository();
+
+const maintenanceRepository = new MaintenanceRepository();
+const usedPartRepository = new UsedPartRepository();
+
+
+
 // Services
 const jwtService = new JwtService();
 const hashService = new HashService();
@@ -204,6 +239,8 @@ commandBus.register(CreateClientCommand, new CreateClientCommandHandler(clientRe
 commandBus.register(UpdateClientCommand, new UpdateClientCommandHandler(clientRepository));
 commandBus.register(DeleteClientCommand, new DeleteClientCommandHandler(clientRepository));
 
+
+
 // test Command Handlers
 commandBus.register(CreateTestCommand, new CreateTestCommandHandler(testRepository));
 commandBus.register(UpdateTestCommand, new UpdateTestCommandHandler(testRepository));
@@ -215,10 +252,18 @@ commandBus.register(DeleteIncidentCommand, new DeleteIncidentCommandHandler(inci
 
 
 
+
+
+// entretien Command Handlers
+commandBus.register(CreateMaintenanceCommand, new CreateMaintenanceHandler(maintenanceRepository,usedPartRepository));
+commandBus.register(GetAllMaintenanceCommand, new GetAllMaintenanceHandler(maintenanceRepository));
+
+
+
 // Routes
 app.use('/api', userRoutes(commandBus));
 app.use('/api/motorcycles', motorcycleRoutes(commandBus));
-
+app.use('/api', maintenanceRoutes(commandBus));
 app.use('/api', driverRoutes(commandBus));
 app.use('/api', partRoutes(commandBus));
 app.use('/api/clients', clientRoutes(commandBus));

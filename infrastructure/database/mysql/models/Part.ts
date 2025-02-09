@@ -1,6 +1,8 @@
 import { Column, Model, Table, DataType,AfterSave,AfterDestroy,AfterUpdate, } from 'sequelize-typescript';
-import PartMongo from "../../mongodb/models/part"; 
+import UsedPart from './UsedPart'; 
+import Maintenance from './Maintenance';
 import { connectDB } from "../../mongodb/models";
+import PartMongo from "../../mongodb/models/part"; 
 
 @Table({
   tableName: 'part',
@@ -50,6 +52,15 @@ export default class Part extends Model<Part> {
   })
   unit_price!: number | null;
 
+  
+  static associate() {
+    this.belongsToMany(Maintenance, {
+      through: UsedPart, 
+      foreignKey: 'part_id', 
+      otherKey: 'maintenance_id', 
+      as: 'maintenances', 
+    });
+  }
 
   @AfterSave
   static async saveToMongo(part: Part) {

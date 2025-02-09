@@ -1,4 +1,4 @@
-import { Column, Model, Table, ForeignKey, DataType } from 'sequelize-typescript';
+import { Column, Model, Table, ForeignKey, DataType,BelongsTo } from 'sequelize-typescript';
 import Maintenance from './Maintenance';  
 import Part from './Part'; 
 
@@ -32,4 +32,13 @@ export default class UsedPart extends Model<UsedPart> {
     allowNull: false,
   })
   unit_price!: number;
+
+
+  // ✅ Association avec Maintenance
+  @BelongsTo(() => Maintenance, { foreignKey: 'maintenance_id', as: 'maintenance' })
+  maintenance!: Maintenance;
+
+  // ✅ Association avec Part
+  @BelongsTo(() => Part, { foreignKey: 'part_id', as: 'part' })
+  part!: Part;
 }

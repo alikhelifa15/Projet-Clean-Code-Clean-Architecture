@@ -1,7 +1,7 @@
 import { axiosInstance } from "../../../api/axios";
 import { PartData, PartResponse } from "../types";
 
-export const partApi = {
+ const partApi = {
     createPart: async (data: PartData): Promise<PartResponse> => {
         const response = await axiosInstance.post('/api/createPart', data);
         return response.data;
@@ -15,3 +15,5 @@ export const partApi = {
         return response.data;
     }
 };
+
+export default partApi;
