@@ -3,6 +3,7 @@ import { Maintenance } from '../../../domain/entities/Maintenance';
 import MaintenanceModel from '../../database/mysql/models/Maintenance';
 import UsedPartModel from '../../database/mysql/models/UsedPart';
 import PartModel from '../../database/mysql/models/Part';
+import MotorcycleModel from '../../database/mysql/models/Motorcycle';
 
 export class MaintenanceRepository implements IMaintenanceRepository {
   async save(maintenance: Maintenance): Promise<Maintenance> {
@@ -47,36 +48,34 @@ export class MaintenanceRepository implements IMaintenanceRepository {
   async findByMotorcycleId(motorcycleId: number): Promise<any[]> {
     const maintenanceModels = await MaintenanceModel.findAll({
       where: { motorcycle_id: motorcycleId },
-      include: [{
-        model: UsedPartModel,
-        as: 'usedParts',  // ✅ Utilisation de l'alias défini dans Maintenance.ts
-        required: false,
-        include: [{
-          model: PartModel,
-          as: 'part',  // ✅ Utilisation de l'alias défini dans UsedPart.ts
+      include: [
+        {
+          model: UsedPartModel,
+          as: 'maintenanceUsedParts',  
           required: false,
-        }]
-      }]
+          include: [
+            {
+              model: PartModel,
+              as: 'part',  
+              required: false,
+            }
+          ]
+        },
+        {
+          model: MotorcycleModel, 
+          as: 'motorcycle',  
+          required: true, 
+        }
+      ],
+      order: [
+        ['maintenance_id', 'DESC']  
+      ]
     });
-  
+    
     if (!maintenanceModels) return [];
   
-     return maintenanceModels;
-    // .map((maintenanceModel) => ({
-    //   id: maintenanceModel.id,
-    //   motorcycleId: maintenanceModel.motorcycle_id,
-    //   maintenanceDate: maintenanceModel.maintenance_date,
-    //   type: maintenanceModel.type,
-    //   description: maintenanceModel.description,
-    //   totalCost: maintenanceModel.total_cost,
-    //   recommendations: maintenanceModel.recommendations,
-    //   status: maintenanceModel.status,
-      // usedParts: maintenanceModel.parts?.map((usedPart :any) => ({
-      //   partId: usedPart.part.id,        // L'id de la pièce
-      //   quantity: usedPart.quantity,     // La quantité de la pièce utilisée
-      //   unitPrice: usedPart.unit_price,  // Le prix unitaire de la pièce
-      // })) || []  // Si aucune pièce n'est trouvée, on retourne un tableau vide
-    // }));
+    return maintenanceModels;
   }
+  
 
 }
