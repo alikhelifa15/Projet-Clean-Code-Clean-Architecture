@@ -9,7 +9,6 @@ const RETRY_INTERVAL = 5000;
 export const connectDB = async (retryCount = 0): Promise<typeof mongoose> => {
   try {
     if (mongoose.connection.readyState === 1) {
-      console.log('MongoDB déjà connecté');
       return mongoose;
     }
 
@@ -21,10 +20,8 @@ export const connectDB = async (retryCount = 0): Promise<typeof mongoose> => {
       useUnifiedTopology: true,
       retryWrites: true,
     };
-
-    console.log('Tentative de connexion à MongoDB...');
-    const connection = await mongoose.connect(MONGODB_URI, options);
-    console.log('MongoDB connecté avec succès');
+ const connection = await mongoose.connect(MONGODB_URI, options);
+  
     
     mongoose.connection.on('error', (err) => {
       console.error('Erreur MongoDB:', err);
@@ -50,7 +47,6 @@ export const connectDB = async (retryCount = 0): Promise<typeof mongoose> => {
     console.error(`Erreur de connexion à MongoDB (tentative ${retryCount + 1}/${MAX_RETRIES}):`, error);
     
     if (retryCount < MAX_RETRIES) {
-      console.log(`Nouvelle tentative dans ${RETRY_INTERVAL/1000} secondes...`);
       await new Promise(resolve => setTimeout(resolve, RETRY_INTERVAL));
       return connectDB(retryCount + 1);
     }
@@ -62,8 +58,6 @@ export const connectDB = async (retryCount = 0): Promise<typeof mongoose> => {
 export const syncDatabase = async (): Promise<void> => {
   try {
     await connectDB();
-    console.log('Début de la synchronisation de la base de données');
-
     const modelsDir = __dirname;
     const modelFiles = fs.readdirSync(modelsDir).filter(file => 
       (file.endsWith('.ts') || file.endsWith('.js')) && file !== 'index.ts'

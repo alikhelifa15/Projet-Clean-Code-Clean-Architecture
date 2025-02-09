@@ -83,7 +83,7 @@ import {
     const columns = [
       ...(userType === 'COMPANY' ? [
         columnHelper.accessor(row => {
-          console.log('Driver data:', row.driver); 
+  
           if (row.driver && row.driver.firstName && row.driver.lastName) {
             return `${row.driver.firstName} ${row.driver.lastName}`;
           }
@@ -95,6 +95,14 @@ import {
           enableSorting: true,
         })
       ] : []),
+
+      columnHelper.accessor(row => {
+        return row.motorcycle ? `${row.motorcycle.model} - ${row.motorcycle.brand}` : "Non assigné";      }, {
+        id: "motorcycleModel",
+        cell: (info) => info.getValue(),
+        header: "Moto",
+        enableSorting: true,
+      }),
       ...(userType === 'DEALER' ? [
         columnHelper.accessor(row => {
           if (row.client && row.client.firstName && row.client.lastName) {
@@ -114,7 +122,7 @@ import {
         header: "Date de début",
         enableSorting: true,
       }),
-  
+      
       columnHelper.accessor("startingMileage", {
         cell: (info) => `${info.getValue()} km`,
         header: "Kilométrage initial",
@@ -134,7 +142,6 @@ import {
         enableSorting: true,
       }),
       columnHelper.accessor((row) => {
-        console.log('Row:', row);
         if (row.status === 'completed' && row.endingMileage && row.startingMileage) {
           return row.endingMileage - row.startingMileage;
         }
@@ -210,19 +217,13 @@ import {
     ] as ColumnDef<TestMoto>[];
  
    const tableData = useMemo(() => {
-    console.log('Raw data:', data);
-    console.log('User type:', userType);
-    
     if (!data) {
-        console.log('No data received');
         return [];
     }
 
     const tests = userType === "COMPANY" 
         ? (data as any).testsByCompany
         : (data as any).testsByDealer;
-        
-    console.log('Extracted tests:', tests);
     return tests || [];
 }, [data, userType]);
 

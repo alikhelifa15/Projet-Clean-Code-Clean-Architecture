@@ -4,11 +4,9 @@ import { GetAllUsersWithDetailsQueryHandler } from "../../../application/usecase
 import { GetUserWithDetailsQueryHandler } from "../../../application/usecases/query-handlers/User-query-handler/GetUserWithDetailsQueryHandler";
 export const userResolvers = {
   user: async (_: unknown, { id, email }: { id?: string; email?: string }) => {
-    console.log('Query user with:', { id, email });
     const handler = new GetUserWithDetailsQueryHandler();
     const query = new GetUserWithDetailsQuery(id ? parseInt(id, 10) : undefined, email);
     const result = await handler.execute(query);
-    console.log('User query result:', result);
     if (!result) return null;
 
     return {
@@ -39,11 +37,9 @@ export const userResolvers = {
     };
   },
   users: async () => {
-    console.log('Query all users');
     const handler = new GetAllUsersWithDetailsQueryHandler();
     const query = new GetAllUsersWithDetailsQuery();
     const results = await handler.execute(query);
-    console.log('Users query results count:', results.length);
 
     return results.map(result => ({
       id: result.user.id,

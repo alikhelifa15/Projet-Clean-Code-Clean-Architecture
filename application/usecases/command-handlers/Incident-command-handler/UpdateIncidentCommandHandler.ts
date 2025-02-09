@@ -11,7 +11,9 @@ export class UpdateIncidentCommandHandler implements CommandHandler<UpdateIncide
       if (!existingIncident) {
         throw new Error('Incident not found');
       }
-  
+     console.log("  UpdateIncidentCommandHandler -> execute -> command",
+      command
+     )
       const updatedIncident = new Incident(
         existingIncident.id,
         existingIncident.testId,

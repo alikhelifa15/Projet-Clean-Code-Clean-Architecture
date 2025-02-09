@@ -101,7 +101,6 @@ export class MotorcycleRepository implements IMotorcycleRepository {
     if (!instance) {
       throw new Error(`Motorcycle with id ${motorcycle.id} not found`);
     }
-    console.log(motorcycle);
     await instance.update({
       brand: motorcycle.brand,
       model: motorcycle.model,

@@ -226,16 +226,9 @@ app.use('/api/clients', clientRoutes(commandBus));
 app.use('/api/tests', testRoutes(commandBus));
 app.use('/api/incidents', incidentRoutes(commandBus));
 
-app.get('/api/hello', (req: Request, res: Response) => {
-  res.send('Hello from Express!');
-});
-
 
 app.use(express.urlencoded({ extended: true }));
 
-
-
-// Start Server
 app.listen(PORT, () => {
   console.log(`Express server running on http://localhost:${PORT}`);
 });
