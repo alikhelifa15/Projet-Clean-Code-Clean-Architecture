@@ -40,19 +40,20 @@ function Overview() {
     <div>
       <section className="flex flex-col lg:flex-row gap-8 lg:gap-30 items-center p-10 overflow-x-hidden">
         <div className="p-5 lg:p-10 w-full lg:w-1/2">
-          <h1 className="text-4xl lg:text-5xl p-2">CARNET D'ENTRETIEN</h1>
-          <p className="text-4xl lg:text-5xl text-primary p-2">MOTO DIGITAL</p>
+          <h1 className="text-4xl lg:text-5xl p-2">GESTION DE FLOTTE</h1>
+          <p className="text-4xl lg:text-4xl text-primary p-2">
+            TRIUMPH MOTORCYCLES
+          </p>
           <p className="text-secondary px-2 py-5">
-            Triumph Motorcycles redéfinit l'expérience du suivi d'entretien moto
-            pour les ateliers de réparation et les passionnés de deux-roues.
-            Avec une approche novatrice et axée sur la simplicité, notre
-            plateforme offre une gestion intuitive et complète de l'entretien
-            des motos, révolutionnant ainsi la manière dont les motards et les
-            concessionnaires interagissent avec leurs véhicules.
+            Triumph Motorcycles révolutionne la gestion de flotte pour les
+            entreprises partenaires et les concessionnaires. Notre plateforme
+            innovante offre une solution complète pour optimiser l'utilisation,
+            l'entretien et le suivi du cycle de vie de vos motos, permettant une
+            gestion efficace et proactive de votre parc de véhicules.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <ButtonPrimary to="/pro">Triumph Motorcycles Pro</ButtonPrimary>
-            <ButtonSecondary to="/rider">Rider Edition</ButtonSecondary>
+            <ButtonPrimary to="/pro">Gestion Pro</ButtonPrimary>
+            <ButtonSecondary to="/rider">Espace Partenaire</ButtonSecondary>
           </div>
         </div>
         <div className="relative w-full lg:w-1/2">
@@ -114,11 +115,11 @@ function Overview() {
               className="text-secondary text-xl px-2 py-5"
               data-aos="fade-left"
             >
-              Triumph Motorcycles offre une solution intégrale et collaborative
-              aux ateliers / concessionnaires et aux motards. D'un côté, les
-              ateliers adoptent un outil de gestion avancé pour leur clientèle.
-              De l'autre, les motards profitent d'une application en accès libre
-              pour simplifier le suivi de l'entretien de leurs motos.
+              Notre solution offre une approche intégrée pour les entreprises et
+              les concessionnaires, permettant une gestion optimale des
+              entretiens, des pièces détachées et du suivi des conducteurs.
+              Automatisez la maintenance préventive, gérez efficacement vos
+              stocks et surveillez l'utilisation de votre flotte en temps réel.
             </p>
           </div>
         </div>
@@ -129,11 +130,11 @@ function Overview() {
           >
             <FaCheckDouble size={30} />
 
-            <h2 className="text-xl py-2 ">Certification</h2>
+            <h2 className="text-xl py-2 ">Maintenance Préventive</h2>
             <p className="text-secondary">
-              Lors du passage en atelier d’un motard chez son concessionnaire
-              prescripteur, son entretien sera enregistré et certifié
-              automatiquement dans son carnet d’entretien personne
+              Planification automatique des entretiens selon les modèles de
+              moto, avec notifications intelligentes basées sur le kilométrage
+              et la durée d'utilisation.
             </p>
           </div>
           <div
@@ -141,11 +142,11 @@ function Overview() {
             data-aos="fade-up"
           >
             <FaHistory size={30} />
-            <h2 className="text-xl py-2">Anticipation</h2>
+            <h2 className="text-xl py-2">Gestion des Stocks</h2>
             <p className="text-secondary ">
-              Une solution qui prédit les entretiens à venir, nécessaires à la
-              sécurité et à la longévité de chaque moto, à l’aide d’intervalles
-              prédéfinis, de la moyenne de roulage et d’indices de fiabilité.
+              Suivi en temps réel des pièces détachées, alertes de stock bas
+              automatiques et historisation complète des commandes pour une
+              maintenance sans interruption.
             </p>
           </div>
           <div
@@ -154,11 +155,11 @@ function Overview() {
           >
             <FaLink size={30} />
 
-            <h2 className="text-xl  py-2">Interconnectivité</h2>
+            <h2 className="text-xl  py-2">Suivi des Conducteurs</h2>
             <p className="text-secondary text-base">
-              Une approche collaborative entre concessionnaires et motards qui
-              promeut la transparence et la fluidité des échanges, tout en
-              respectant la confidentialité des données de tous les acteurs.
+              Gestion détaillée des profils conducteurs, attribution des motos
+              et suivi des essais avec historique complet des incidents et des
+              performances.
             </p>
           </div>
         </div>
@@ -174,12 +175,12 @@ function Overview() {
             />
           </div>
           <div className="flex flex-col">
-            <span className="bg-primary text-white px-2 w-25 rounded-full text-center py-1 mt-2">
-              Pro Edition
+            <span className="bg-primary text-white px-2 w-30 rounded-full text-center py-1 mt-2">
+            Solution Pro
             </span>
             <h1 className="text-3xl lg:text-4xl font-semibold text-start">
-              L’outil de gestion de parc clients
-              <span className="text-primary"> indispensable</span>
+            La plateforme de gestion de flotte
+            <span className="text-primary"> essentielle</span>
             </h1>
             <hr className="w-20 ml-1  text-primary mt-4 " />
             <p className="text-secondary text-xl px-2 py-5">
@@ -202,7 +203,7 @@ function Overview() {
         <div className="relative flex flex-col lg:flex-row items-center justify-between py-5 px-5 lg:px-30">
           <div className="flex flex-col w-full lg:w-[32rem] mb-10 lg:mb-0">
             <span className="bg-primary text-white px-4 py-1 rounded-full text-center mt-2 w-max">
-              Rider Edition
+            Espace Partenaire
             </span>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-start mt-5">
               Le suivi d’une moto n’a jamais été aussi
@@ -210,19 +211,12 @@ function Overview() {
             </h1>
             <hr className="w-16 lg:w-20 text-primary mt-4" />
             <p className="text-secondary text-base sm:text-lg lg:text-xl px-2 py-5">
-              Passionnés de deux-roues motorisés, nous vous mettons à
-              disposition un carnet d’entretien moto numérique, facilitant le
-              suivi de chacune de vos motos. L'outil s'adapte à votre modèle,
-              qu'il soit doté d'une motorisation thermique, électrique, ou de
-              toutes autres spécificités techniques, et à votre usage, qu'il
-              soit sur route, sur tout-terrain ou sur piste. Regroupez
-              l'historique complet de vos motos, accompagné de leurs factures.
-              Visualisez de manière simple et concise tous les futurs travaux à
-              effectuer sur vos motos. Profitez des bons plans de votre atelier
-              habituel ou ponctuel. Renforcez la valeur de revente de votre moto
-              et facilitez la transmission de vos données lors de la vente.
-              Comme des milliers de personnes, essayez-la, vous ne pourrez plus
-              vous en passer.
+            Notre plateforme vous offre tous les outils nécessaires pour une gestion optimale de votre flotte de motos Triumph.
+              Suivez en temps réel l'état de vos véhicules, planifiez les entretiens préventifs selon les spécificités de chaque modèle,
+              gérez efficacement vos stocks de pièces détachées et supervisez l'activité de vos conducteurs. Grâce à nos fonctionnalités
+              avancées de notification et de suivi, anticipez les besoins de maintenance, optimisez vos coûts d'exploitation et 
+              assurez la sécurité de votre flotte. Adoptez une approche proactive de la gestion de flotte et maximisez 
+              le retour sur investissement de vos véhicules Triumph.
             </p>
           </div>
 

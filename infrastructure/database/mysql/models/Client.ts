@@ -1,10 +1,19 @@
-import { Column, ForeignKey, Model, Table, DataType, AfterSave, AfterUpdate, AfterDestroy } from 'sequelize-typescript';
-import Dealer from './Dealer';
-import { connectDB } from '../../mongodb/models';
-import ClientMongo from '../../mongodb/models/client';
+import {
+  Column,
+  ForeignKey,
+  Model,
+  Table,
+  DataType,
+  AfterSave,
+  AfterUpdate,
+  AfterDestroy,
+} from "sequelize-typescript";
+import Dealer from "./Dealer";
+import { connectDB } from "../../mongodb/models";
+import ClientMongo from "../../mongodb/models/client";
 
 @Table({
-  tableName: 'client',
+  tableName: "client",
   timestamps: false,
   hooks: {
     afterCreate: async (instance: Client) => {
@@ -15,8 +24,8 @@ import ClientMongo from '../../mongodb/models/client';
     },
     afterDestroy: async (instance: Client) => {
       await Client.deleteFromMongo(instance);
-    }
-  }
+    },
+  },
 })
 export default class Client extends Model<Client> {
   @Column({
@@ -55,9 +64,6 @@ export default class Client extends Model<Client> {
   static async saveToMongo(instance: Client) {
     try {
       await connectDB();
-      console.log("Tentative de connexion à MongoDB...");
-      console.log("Instance à sauvegarder:", JSON.stringify(instance, null, 2));
-      
       const existingClient = await ClientMongo.findOne({ id: instance.id });
 
       if (existingClient) {
@@ -70,11 +76,10 @@ export default class Client extends Model<Client> {
         dealer_id: instance.dealer_id,
         first_name: instance.first_name,
         last_name: instance.last_name,
-        phone: instance.phone
+        phone: instance.phone,
       });
 
       const savedClient = await newClient.save();
-      console.log("Client saved to MongoDB successfully!", savedClient);
     } catch (err) {
       console.error("Error saving client to MongoDB:", err);
       console.error("Instance that failed:", instance.toJSON());
@@ -86,7 +91,10 @@ export default class Client extends Model<Client> {
     try {
       await connectDB();
       console.log("Tentative de mise à jour MongoDB...");
-      console.log("Instance à mettre à jour:", JSON.stringify(instance, null, 2));
+      console.log(
+        "Instance à mettre à jour:",
+        JSON.stringify(instance, null, 2)
+      );
 
       const result = await ClientMongo.findOneAndUpdate(
         { id: instance.id },
@@ -95,12 +103,12 @@ export default class Client extends Model<Client> {
             dealer_id: instance.dealer_id,
             first_name: instance.first_name,
             last_name: instance.last_name,
-            phone: instance.phone
-          }
+            phone: instance.phone,
+          },
         },
-        { 
+        {
           upsert: true,
-          new: true
+          new: true,
         }
       );
 
@@ -115,8 +123,6 @@ export default class Client extends Model<Client> {
   static async deleteFromMongo(instance: Client) {
     try {
       await connectDB();
-      console.log("Tentative de suppression MongoDB pour ID:", instance.id);
-
       const result = await ClientMongo.deleteOne({ id: instance.id });
 
       if (result.deletedCount > 0) {

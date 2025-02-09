@@ -1,17 +1,15 @@
-import { Request, Response } from 'express';
-import { CommandBus } from '../../application/usecases/CommandBus';
-import { CreateDriverCommand } from '../../application/usecases/commands/Driver-Commands/CreateDriverCommand';
-import { UpdateDriverCommand } from '../../application/usecases/commands/Driver-Commands/UpdateDriverCommand';
-import { GetAllDriversCommand } from '../../application/usecases/commands/Driver-Commands/GetAllDriversCommand';
-import { DeleteDriverCommand } from '../../application/usecases/commands/Driver-Commands/DeleteDriverCommand';
-import { GetDriverByIdCommand } from '../../application/usecases/commands/Driver-Commands/GetDriverByIdCommand';
+import { Request, Response } from "express";
+import { CommandBus } from "../../application/usecases/CommandBus";
+import { CreateDriverCommand } from "../../application/usecases/commands/Driver-Commands/CreateDriverCommand";
+import { UpdateDriverCommand } from "../../application/usecases/commands/Driver-Commands/UpdateDriverCommand";
+import { GetAllDriversCommand } from "../../application/usecases/commands/Driver-Commands/GetAllDriversCommand";
+import { DeleteDriverCommand } from "../../application/usecases/commands/Driver-Commands/DeleteDriverCommand";
+import { GetDriverByIdCommand } from "../../application/usecases/commands/Driver-Commands/GetDriverByIdCommand";
 
 export class DriverController {
   constructor(private commandBus: CommandBus) {}
 
-  // Créer un nouveau driver
   async createDriver(req: Request, res: Response): Promise<void> {
-    console.log('Request Body:', req.body);
     try {
       const {
         companyId,
@@ -34,17 +32,17 @@ export class DriverController {
       );
 
       const newDriver = await this.commandBus.execute(command);
-      res.status(201).json({ message: 'Driver created successfully', driver: newDriver });
+      res
+        .status(201)
+        .json({ message: "Driver created successfully", driver: newDriver });
     } catch (error) {
-      console.error('Error occurred during driver creation:', error);
+      console.error("Error occurred during driver creation:", error);
       if (error instanceof Error)
         res.status(400).json({ error: error.message });
     }
   }
 
-  // Mettre à jour un driver existant
   async updateDriver(req: Request, res: Response): Promise<void> {
-    console.log('Request Body:', req.body);
     try {
       const { id } = req.params;
       const {
@@ -69,9 +67,12 @@ export class DriverController {
       );
 
       const updatedDriver = await this.commandBus.execute(command);
-      res.status(200).json({ message: 'Driver updated successfully', driver: updatedDriver });
+      res.status(200).json({
+        message: "Driver updated successfully",
+        driver: updatedDriver,
+      });
     } catch (error) {
-      console.error('Error occurred during driver update:', error);
+      console.error("Error occurred during driver update:", error);
       if (error instanceof Error)
         res.status(400).json({ error: error.message });
     }
@@ -79,16 +80,15 @@ export class DriverController {
 
   // Supprimer un driver
   async deleteDriver(req: Request, res: Response): Promise<void> {
-    console.log('Request Params:', req.params);
     try {
       const { id } = req.params;
 
       const command = new DeleteDriverCommand(parseInt(id, 10));
 
       await this.commandBus.execute(command);
-      res.status(200).json({ message: 'Driver deleted successfully' });
+      res.status(200).json({ message: "Driver deleted successfully" });
     } catch (error) {
-      console.error('Error occurred during driver deletion:', error);
+      console.error("Error occurred during driver deletion:", error);
       if (error instanceof Error)
         res.status(400).json({ error: error.message });
     }
@@ -96,31 +96,33 @@ export class DriverController {
 
   async getDriverById(req: Request, res: Response) {
     try {
-        const driverId = parseInt(req.params.id, 10); // Convertir req.params.id en number
-        if (isNaN(driverId)) {
-          res.status(400).json({ error: 'Invalid driver ID' });
-          return;
-        }
-    
-        const result = await this.commandBus.execute(new GetDriverByIdCommand(driverId));
-        res.status(200).json(result);
-      } catch (error) {
-        if (error instanceof Error){res.status(400).json({ error: error.message });} 
+      const driverId = parseInt(req.params.id, 10);
+      if (isNaN(driverId)) {
+        res.status(400).json({ error: "Invalid driver ID" });
+        return;
       }
-  }
 
-  // Méthode pour obtenir tous les drivers
-  async getAllDrivers(req: Request, res: Response): Promise<any> {
-    try {
-      // Instancier et exécuter la commande
-      const command = new GetAllDriversCommand();
-      const drivers = await this.commandBus.execute(command);
-
-      // Retourner la liste des drivers avec un statut 200
-      return res.status(200).json({ drivers });
+      const result = await this.commandBus.execute(
+        new GetDriverByIdCommand(driverId)
+      );
+      res.status(200).json(result);
     } catch (error) {
-        if (error instanceof Error){res.status(400).json({ error: error.message });} 
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message });
+      }
     }
   }
 
+  async getAllDrivers(req: Request, res: Response): Promise<any> {
+    try {
+      const command = new GetAllDriversCommand();
+      const drivers = await this.commandBus.execute(command);
+
+      return res.status(200).json({ drivers });
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message });
+      }
+    }
+  }
 }

@@ -3,9 +3,7 @@ import { Driver } from '../../../domain/entities/Driver';
 import DriverModel from '../../database/mysql/models/Driver'; 
 
 export class DriverRepository implements IDriverRepository {
-  // Méthode pour enregistrer un driver
   async save(driver: Driver): Promise<Driver> {
-    // Créer un driver dans la base de données avec Sequelize
     const driverModel = await DriverModel.create({
       company_id: driver.companyId,
       first_name: driver.firstName,
@@ -47,7 +45,6 @@ export class DriverRepository implements IDriverRepository {
     );
   }
 
-  // Méthode pour trouver tous les drivers
   async findAll(): Promise<Driver[]> {
     const drivers = await DriverModel.findAll();
 
@@ -65,7 +62,6 @@ export class DriverRepository implements IDriverRepository {
     );
   }
 
-  // Méthode pour mettre à jour un driver
   async update(id: number, updatedFields: Partial<Driver>): Promise<Driver | null> {
     const driver = await DriverModel.findByPk(id);
     if (driver) {
@@ -75,7 +71,6 @@ export class DriverRepository implements IDriverRepository {
       throw new Error(`Driver with ID ${id} not found`);
     }
   
-    // Mise à jour de l'instance
     await driver.update(
       {
         company_id: updatedFields.companyId,
@@ -86,10 +81,10 @@ export class DriverRepository implements IDriverRepository {
         experience: updatedFields.experience ?? "",
         status: updatedFields.status,
       },
-      { validate: true } // Optionnel : valider les contraintes du modèle
+      { validate: true } 
     );
   
-    // Retourner une instance logique
+  
     return new Driver(
       driver.id,
       driver.company_id,
@@ -102,7 +97,6 @@ export class DriverRepository implements IDriverRepository {
     );
   }
 
-  // Méthode pour supprimer un driver
   async delete(id: number): Promise<boolean> {
     const deletedCount = await DriverModel.destroy({ where: { id } });
     return deletedCount > 0;

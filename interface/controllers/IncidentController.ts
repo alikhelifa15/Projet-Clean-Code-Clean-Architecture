@@ -34,6 +34,8 @@ export class IncidentController {
     try {
       const command = new UpdateIncidentCommand(
         parseInt(req.params.id),
+        req.body.incident_date,
+        req.body.test_id,
         req.body.type,
         req.body.severity,
         req.body.description,
