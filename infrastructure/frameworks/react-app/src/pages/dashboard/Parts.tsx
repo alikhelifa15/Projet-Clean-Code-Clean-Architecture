@@ -129,9 +129,9 @@ const confirmDelete = () => {
   // Mémorisation des données de la table
   const tableData = useMemo(() => {
     
-    if (infoUser.type.value === "DEALER") {
+    
       return (data as GetPartsByDealerData)?.parts || [];
-    }
+   
     return [];
   }, [data, infoUser.type.value]);
 

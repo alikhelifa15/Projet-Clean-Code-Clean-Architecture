@@ -68,7 +68,7 @@ export class MaintenanceRepository implements IMaintenanceRepository {
         }
       ],
       order: [
-        ['maintenance_id', 'DESC']  
+        ['id', 'DESC']  
       ]
     });
     
