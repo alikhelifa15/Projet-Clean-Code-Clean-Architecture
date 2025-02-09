@@ -1,5 +1,7 @@
-import { Column, ForeignKey, Model, Table, DataType } from 'sequelize-typescript';
-import  Motorcycle  from './Motorcycle'; 
+import { Column, ForeignKey, Model, Table, DataType,HasMany } from 'sequelize-typescript';
+import Motorcycle from './Motorcycle'; 
+import UsedPart from './UsedPart'; 
+import Part from './Part'; 
 
 @Table({
   tableName: 'maintenance',
@@ -16,7 +18,7 @@ export default class Maintenance extends Model<Maintenance> {
   @ForeignKey(() => Motorcycle)
   @Column({
     type: DataType.INTEGER,
-    allowNull: false, 
+    allowNull: false,
   })
   motorcycle_id!: number;
 
@@ -34,13 +36,13 @@ export default class Maintenance extends Model<Maintenance> {
 
   @Column({
     type: DataType.TEXT,
-    allowNull: true, // Description est optionnelle
+    allowNull: true, 
   })
   description!: string | null;
 
   @Column({
     type: DataType.DECIMAL(10, 2),
-    allowNull: true, // Total cost est optionnel
+    allowNull: true, 
   })
   total_cost!: number | null;
 
@@ -55,4 +57,8 @@ export default class Maintenance extends Model<Maintenance> {
     allowNull: false,
   })
   status!: string;
+
+  // ✅ Association avec UsedPart
+  @HasMany(() => UsedPart, { as: 'usedParts', foreignKey: 'maintenance_id' })
+  usedParts!: UsedPart[];
 }

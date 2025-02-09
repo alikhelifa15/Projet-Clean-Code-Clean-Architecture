@@ -1,6 +1,6 @@
-import { Column, Model, Table, DataType,AfterSave,AfterDestroy,AfterUpdate, } from 'sequelize-typescript';
-import PartMongo from "../../mongodb/models/part"; 
-import { connectDB } from "../../mongodb/models";
+import { Column, Model, Table, DataType } from 'sequelize-typescript';
+import UsedPart from './UsedPart'; 
+import Maintenance from './Maintenance';
 
 @Table({
   tableName: 'part',
@@ -50,61 +50,13 @@ export default class Part extends Model<Part> {
   })
   unit_price!: number | null;
 
-
-  @AfterSave
-  static async saveToMongo(part: Part) {
-    try {
-      await connectDB();
-
-      const newPart = new PartMongo({
-        id: part.id,
-        reference: part.reference,
-        name: part.name,
-        description: part.description,
-        currentStock: part.current_stock,
-        alertThreshold: part.alert_threshold,
-        unitPrice: part.unit_price,
-      });
-
-      await newPart.save();
-      console.log("Pièce enregistrée dans MongoDB avec succès !");
-    } catch (err) {
-      console.error("Erreur lors de l'enregistrement dans MongoDB :", err);
-    }
+  
+  static associate() {
+    this.belongsToMany(Maintenance, {
+      through: UsedPart, 
+      foreignKey: 'part_id', 
+      otherKey: 'maintenance_id', 
+      as: 'maintenances', 
+    });
   }
-
-  @AfterDestroy
-  static async deleteFromMongo(part: Part) {
-    console.log("AfterDestroy hook triggered for ID:", part.id);
-    try {
-      await connectDB();
-      console.log("Tentative de suppression piéce MongoDB pour ID:", part.id);
-      await PartMongo.deleteOne({ id: part.id });
-      console.log("Pièce supprimée de MongoDB avec succès !");
-    } catch (err) {
-      console.error("Erreur lors de la suppression dans MongoDB :", err);
-    }
-  }
-
-  @AfterUpdate
-  static async updateMongo(part: Part) {
-    try {
-      await connectDB();
-      await PartMongo.updateOne(
-        { id: part.id },
-        {
-          reference: part.reference,
-          name: part.name,
-          description: part.description,
-          currentStock: part.current_stock,
-          alertThreshold: part.alert_threshold,
-          unitPrice: part.unit_price,
-        }
-      );
-      console.log("Pièce mise à jour dans MongoDB avec succès !");
-    } catch (err) {
-      console.error("Erreur lors de la mise à jour dans MongoDB :", err);
-    }
-  }
-
 }

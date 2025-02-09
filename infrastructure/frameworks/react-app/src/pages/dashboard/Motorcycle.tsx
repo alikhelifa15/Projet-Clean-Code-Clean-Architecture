@@ -13,6 +13,8 @@ import { CiSearch } from "react-icons/ci";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import { BsPencil, BsTrash2 } from "react-icons/bs";
 import { FaMotorcycle } from "react-icons/fa6";
+import { GrHostMaintenance } from "react-icons/gr";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import { useMotorcyclesByDealer } from "../../features/motos/hooks/useMotorcyclesByDealer";
 import Loader from "../../components/Loader";
@@ -50,6 +52,8 @@ const [formMode, setFormMode] = useState<'add' | 'edit'>('add');
   const [selectedMotorcycle, setSelectedMotorcycle] = useState<Motorcycle | null>(null);
   
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  
   const getStatusBadgeStyle = (status: string) => {
     switch (status) {
       case "active":
@@ -84,6 +88,9 @@ const [formMode, setFormMode] = useState<'add' | 'edit'>('add');
         }
       );
     }
+  };
+  const handleViewServiceBook = (idMoto: number) => {
+    navigate(`/dashboard/service-book/${idMoto}`);
   };
   const columns = [
     columnHelper.accessor("photo", {
@@ -163,6 +170,10 @@ const [formMode, setFormMode] = useState<'add' | 'edit'>('add');
             <BsTrash2 
               className="h-5 w-5 hover:text-primary cursor-pointer" 
               onClick={() => handleDelete(motorcycle)}
+            />
+            <GrHostMaintenance 
+              className="h-5 w-5 hover:text-primary cursor-pointer" 
+              onClick={() => handleViewServiceBook(motorcycle.id)}
             />
           </div>
         );

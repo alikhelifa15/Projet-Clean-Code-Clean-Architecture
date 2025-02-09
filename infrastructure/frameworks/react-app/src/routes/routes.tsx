@@ -77,7 +77,7 @@ function App() {
         {/* Routes dashboard protégées */}
         <Route path="/dashboard" element={wrapPage("Tableau de bord", <Home />, true, ["ADMIN", "DEALER", "COMPANY"])} />
         <Route path="/dashboard/customer-base" element={wrapPage("Parc clients", <CustomerBase />, true, ["DEALER", "COMPANY"])} />
-        <Route path="/dashboard/service-book" element={wrapPage("Carnet d'entretien", <ServiceBook />, true, ["DEALER", "COMPANY"])} />
+        <Route path="/dashboard/service-book/:idmoto" element={wrapPage("Carnet d'entretien", <ServiceBook />, true, ["DEALER", "COMPANY"])} />
         <Route path="/dashboard/motorcycle" element={wrapPage("Motos", <Motorcycle />, true, ["DEALER", "COMPANY"])} />
         <Route path="/dashboard/profile" element={wrapPage("Profile", <Profile />, true, ["ADMIN", "DEALER", "COMPANY"])} />
         <Route path="/dashboard/users" element={wrapPage("Utilisateurs", <Users />, true, ["ADMIN"])} />
