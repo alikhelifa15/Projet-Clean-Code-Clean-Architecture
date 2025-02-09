@@ -1,4 +1,4 @@
-import { Column, ForeignKey, Model, Table, DataType,HasMany } from 'sequelize-typescript';
+import { Column, ForeignKey, Model, Table, DataType,HasMany,BelongsTo } from 'sequelize-typescript';
 import Motorcycle from './Motorcycle'; 
 import UsedPart from './UsedPart'; 
 import Part from './Part'; 
@@ -58,7 +58,9 @@ export default class Maintenance extends Model<Maintenance> {
   })
   status!: string;
 
+  // ✅ Association avec Motorcycle
+  @BelongsTo(() => Motorcycle, { foreignKey: 'motorcycle_id', as: 'motorcycle' })
   // ✅ Association avec UsedPart
-  @HasMany(() => UsedPart, { as: 'usedParts', foreignKey: 'maintenance_id' })
+  @HasMany(() => UsedPart, { as: 'maintenanceUsedParts', foreignKey: 'maintenance_id' })
   usedParts!: UsedPart[];
 }

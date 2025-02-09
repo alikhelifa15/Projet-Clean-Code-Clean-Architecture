@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { maintenanceApi } from "../api/rest";
+import  maintenanceApi  from "../api/rest";
+import  partApi  from "../../parts/api/rest";
 import { FaTrash } from 'react-icons/fa';
 import { useParts } from "../../parts/hooks/useParts";
 import { useParams } from "react-router-dom";
@@ -32,8 +33,6 @@ interface FormData {
 const MaintenanceForm: React.FC<MaintenanceFormProps> = ({ isOpen, onClose, maintenance, mode }) => {
     const params = useParams();
     const id = params.idmoto || "";
-    console.log(id);
-    
   const [formData, setFormData] = useState<FormData>({
     motorcycleId:  id,
     maintenanceDate: new Date().toISOString().split("T")[0],
@@ -46,16 +45,31 @@ const MaintenanceForm: React.FC<MaintenanceFormProps> = ({ isOpen, onClose, main
   });
 
   const [selectedPart, setSelectedPart] = useState(null);
+  const [updatPart, setupdatePart] = useState<Array<{ partId: string; name: string; unitPrice: number; quantity: number }> | null>(null);
   const [quantity, setQuantity] = useState(1);
 
   const queryClient = useQueryClient();
-
   const { data, isLoading, isError } =  useParts();
   const parts = data?.parts ?? [];
+  
+  useEffect(() => {
 
+  }, [data]);
+  
   useEffect(() => {
     if (!isOpen) return;
-
+    if (mode === "add") {
+      setFormData({
+        motorcycleId: id,
+        maintenanceDate: new Date().toISOString().split("T")[0],
+        type: "",
+        description: "",
+        totalCost: 0,
+        recommendations: "",
+        status: "En cours",
+        usedParts: [],
+      });
+    }
     if (mode === "edit" && maintenance) {
       setFormData({
         motorcycleId: maintenance.motorcycleId,
@@ -69,16 +83,41 @@ const MaintenanceForm: React.FC<MaintenanceFormProps> = ({ isOpen, onClose, main
       });
     }
   }, [isOpen, maintenance, mode]);
-
-  const addMutation = useMutation({
-    mutationFn: (data: FormData) => maintenanceApi.createMaintenance(data),
-    onSuccess: () => {
+ console.log(data);
+ const addMutation = useMutation({
+  
+  mutationFn: async (data: FormData) => { 
+    const partsToUpdate = data.usedParts || [];
+    setupdatePart(partsToUpdate);
+    return maintenanceApi.createMaintenance(data);
+  },
+  onSuccess: async (data: FormData) => {
+    try {
+      if (!updatPart || updatPart.length === 0) {
+        return;
+      }
+      await Promise.all(
+        updatPart?.map(async (partItem) => {
+          const partToUpdate = parts.find((part: any) => part.id === partItem.partId);
+          if (partToUpdate) {
+            console.log(`🔄 Mise à jour de la pièce ${partToUpdate.id}`);
+            await partApi.updatePart(partToUpdate.id, {
+              ...partToUpdate,
+              currentStock: Number(partToUpdate.currentStock) - Number(partItem.quantity),
+            });
+          }
+        })
+      );
       queryClient.invalidateQueries({ queryKey: ["maintenances"] });
+      queryClient.invalidateQueries({ queryKey: ["parts"] });
       onClose();
-      toast.success("Entretien ajouté avec succès");
-    },
-    onError: () => toast.error("Erreur lors de l'ajout de l'entretien"),
-  });
+      toast.success("Entretien ajouté et stock des pièces mis à jour");
+    } catch (error) {
+      toast.error("Erreur lors de la mise à jour du stock");
+    }
+  },
+  onError: () => toast.error("Erreur lors de l'ajout de l'entretien"),
+});
 
   const editMutation = useMutation({
     // mutationFn: (data: FormData) => maintenanceApi.updateMaintenance(data),
@@ -121,8 +160,6 @@ const MaintenanceForm: React.FC<MaintenanceFormProps> = ({ isOpen, onClose, main
 
   const handleAddPart = () => {
     if (!selectedPart) return;
-console.log('from handleAddPart', selectedPart);
-
     const newPart = {
       partId: selectedPart.id,
       name: selectedPart.name,
@@ -205,7 +242,7 @@ console.log('from handleAddPart', selectedPart);
               <option value="">Sélectionner une pièce</option>
               {parts?.map((part:any) => (
                 <option key={part.id} value={part.id}>
-                  {part.name} {part.reference} - {part.unitPrice} €
+                  {part.name} {part.reference} - {part.unitPrice} € / {part.currentStock} en stock
                 </option>
               ))}
             </select>

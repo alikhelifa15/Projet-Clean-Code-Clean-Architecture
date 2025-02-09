@@ -7,11 +7,13 @@ import {
   AfterSave,
   AfterUpdate,
   AfterDestroy,
+  HasMany,
 } from "sequelize-typescript";
 import Company from "./Company";
 import Dealer from "./Dealer";
 import { connectDB } from "../../mongodb/models";
 import MotorcycleMongo from "../../mongodb/models/motorcycle";
+import Maintenance from './Maintenance';
 @Table({
   tableName: "motorcycle",
   timestamps: false,
@@ -85,6 +87,8 @@ export default class Motorcycle extends Model<Motorcycle> {
     allowNull: false,
   })
   maintenance_interval!: number;
+
+  @HasMany(() => Maintenance)
 
   @AfterSave
   static async saveToMongo(instance: Motorcycle) {

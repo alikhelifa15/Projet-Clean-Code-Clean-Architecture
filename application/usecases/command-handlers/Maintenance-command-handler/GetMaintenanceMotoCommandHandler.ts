@@ -12,7 +12,7 @@ export class GetAllMaintenanceHandler {
     const { motorcycleId } = command;
     const maintenances = await this.maintenanceRepository.findByMotorcycleId(motorcycleId);
     if (maintenances.length === 0) {
-      throw new Error('Aucune maintenance trouvée pour cette moto.');
+      return [];
     }
     return maintenances ;
     

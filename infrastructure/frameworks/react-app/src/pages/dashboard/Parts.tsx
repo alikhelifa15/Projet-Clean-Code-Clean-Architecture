@@ -21,7 +21,7 @@ import Button from "../../components/Button/Button";
 import { Part } from "../../features/parts/types";
 import { getDecodedToken } from "../../utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { partApi } from "../../features/parts/api/rest";
+import  partApi  from "../../features/parts/api/rest";
 import { toast } from "react-toastify";
 import type { GetPartsByDealerData } from "../../features/parts/types";
 

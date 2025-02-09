@@ -45,7 +45,7 @@ export class MaintenanceController {
       if (maintenances && maintenances.length > 0) {
         res.status(200).json({ message: "Maintenances récupérées avec succès", maintenances });
       } else {
-        res.status(404).json({ message: "Aucune maintenance trouvée pour cette moto." });
+        res.status(200).json([]);
       }
     } catch (error) {
       console.error("Error during fetching maintenances:", error);

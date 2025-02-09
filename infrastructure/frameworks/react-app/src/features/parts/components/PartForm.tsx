@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { partApi } from "../api/rest";
+import partApi from "../api/rest";
 import { Part, PartData } from "../types"; // Importe PartData depuis tes types
 import { getDecodedToken } from "../../../utils";
 
