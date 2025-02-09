@@ -170,7 +170,7 @@ const TestMotoForm: React.FC<TestMotoFormProps> = ({
     <div className="fixed inset-0 z-9999 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg w-full max-w-2xl">
         <h2 className="text-2xl font-bold mb-4">
-          {mode === "add" ? "Ajouter un test" : "Modifier le test"}
+          {mode === "add" ? "Ajouter un essai" : "Modifier le essai"}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
