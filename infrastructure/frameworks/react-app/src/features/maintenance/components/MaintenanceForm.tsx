@@ -194,7 +194,7 @@ const MaintenanceForm: React.FC<MaintenanceFormProps> = ({ isOpen, onClose, main
     <div className="fixed inset-0 z-9999 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg w-full max-w-2xl">
         <h2 className="text-2xl font-bold mb-4">{mode === "add" ? "Ajouter un entretien" : "Modifier un entretien"}</h2>
-       <h2><p>ID du véhicule : {formData.motorcycleId}</p></h2>
+       
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
            
@@ -255,7 +255,7 @@ const MaintenanceForm: React.FC<MaintenanceFormProps> = ({ isOpen, onClose, main
                   onChange={(e) => setQuantity(Number(e.target.value))}
                   className="border p-2 w-20"
                 />
-                <button type="button" onClick={handleAddPart} className="bg-blue-500 text-white p-2 rounded">
+                <button type="button" onClick={handleAddPart} className="bg-green-500 text-white p-2 rounded">
                   Ajouter
                 </button>
               </div>
@@ -303,7 +303,7 @@ const MaintenanceForm: React.FC<MaintenanceFormProps> = ({ isOpen, onClose, main
             <button type="button" onClick={onClose} className="px-4 py-2 border border-gray-300 rounded-md">
               Annuler
             </button>
-            <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded-md">
+            <button type="submit" className="px-4 py-2  bg-primary text-white rounded-md">
               {mode === "add" ? "Ajouter" : "Modifier"}
             </button>
           </div>

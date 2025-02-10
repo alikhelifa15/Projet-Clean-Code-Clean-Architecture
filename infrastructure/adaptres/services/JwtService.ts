@@ -1,7 +1,13 @@
 import jwt from 'jsonwebtoken';
 
 export class JwtService {
-  private secretKey = 'yourSecretKey';
+  //private secretKey = process.env.JWT_SECRET as string;
+  private secretKey = "a3f1b29c8a62d3e4f7c9b6a8e1d5c3a7";
+  constructor() {
+    if (!this.secretKey) {
+      throw new Error("SECRET_KEY non définie dans .env");
+    }
+  }
 
   generateToken(user: any, company: any, dealer: any): string {
     return jwt.sign(
@@ -18,7 +24,6 @@ export class JwtService {
       }
     );
   }
-  
 
   verifyToken(token: string): any {
     return jwt.verify(token, this.secretKey);

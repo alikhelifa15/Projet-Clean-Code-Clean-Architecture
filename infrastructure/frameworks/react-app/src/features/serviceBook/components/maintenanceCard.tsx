@@ -3,11 +3,12 @@ import { jsPDF } from "jspdf";
 
 interface MaintenanceCardProps {
   date: string;
-  pieces: { name: string; price: number; quantity: number }[];
+  pieces: { name: string; price: number; quantity: number; }[];
   totalPrice: number;
+  recommendation:string
 }
 
-const MaintenanceCard: React.FC<MaintenanceCardProps> = ({ date, pieces, totalPrice }) => {
+const MaintenanceCard: React.FC<MaintenanceCardProps> = ({ date, pieces, totalPrice,recommendation }) => {
   const downloadReport = () => {
     try {
       const doc = new jsPDF();
@@ -68,6 +69,12 @@ const MaintenanceCard: React.FC<MaintenanceCardProps> = ({ date, pieces, totalPr
       doc.text('Total:', 120, yPos);
       doc.text(`${totalPrice.toFixed(2)} €`, 160, yPos);
       
+      // Ligne avant le total
+      yPos += 50;
+      doc.text("Recommendations : ", 14, yPos);
+      yPos += 5;
+      doc.text(recommendation, 14, yPos);
+
       // Sauvegarde du PDF
       const fileName = `rapport_entretien_${date.replace(/\//g, '-')}.pdf`;
       doc.save(fileName);
@@ -84,7 +91,7 @@ const MaintenanceCard: React.FC<MaintenanceCardProps> = ({ date, pieces, totalPr
 
       {/* Liste des pièces */}
       <div className="mt-4">
-        <h4 className="text-lg font-medium text-gray-700">Pièces remplacées :</h4>
+        <h4 className="text-lg font-medium text-gray-700">Pièces remplacées ou services :</h4>
         <ul className="mt-2 text-sm text-gray-600">
           {pieces.map((piece, index) => (
             <li key={index} className="flex justify-between py-1 border-b last:border-b-0">
@@ -92,6 +99,15 @@ const MaintenanceCard: React.FC<MaintenanceCardProps> = ({ date, pieces, totalPr
               <span className="font-semibold text-gray-800">{piece.price}€ X {piece.quantity}</span>
             </li>
           ))}
+        </ul>
+      </div>
+
+      <div className="mt-4">
+        <h4 className="text-lg font-medium text-gray-700">Recommendations et remarque :</h4>
+        <ul className="mt-2 text-sm text-gray-600">
+            <li className="flex justify-between py-1 border-b last:border-b-0">
+              <span>{recommendation}</span>
+            </li>
         </ul>
       </div>
 
