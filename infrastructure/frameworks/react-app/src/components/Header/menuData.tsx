@@ -8,12 +8,12 @@ import { Menu } from "../../types/menu";
       },
       {
         id: 2,
-        title: "Pro Edition",
+        title: "Gestion Pro",
         path: "/pro",
       },
       {
         id: 4,
-        title: "Rider Edition",
+        title: "Espace Partenaire",
         path: "/rider",
       },
       {

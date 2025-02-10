@@ -1,0 +1,14 @@
+{
+    "private": true,
+    "name": "@triumphmotorcycles/infrastructure",
+    "version": "0.1.0",
+    "description": "Application for motorcycle management",
+    "devDependencies": {
+        "@types/jsonwebtoken": "^9.0.7"
+    },
+    "dependencies": {
+        "@types/bcryptjs": "^2.4.6",
+        "bcryptjs": "^2.4.3",
+        "jsonwebtoken": "^9.0.2"
+    }
+}

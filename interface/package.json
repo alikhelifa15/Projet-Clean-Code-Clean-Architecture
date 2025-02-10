@@ -1,0 +1,15 @@
+{
+    "private": true,
+    "name": "@triumphmotorcycles/interface",
+    "version": "0.1.0",
+    "description": "Application for motorcycle management",
+    "dependencies": {
+        "dotenv": "^16.4.7",
+        "express": "^4.21.1",
+        "jsonwebtoken": "^9.0.2"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.0",
+        "@types/jsonwebtoken": "^9.0.8"
+    }
+}

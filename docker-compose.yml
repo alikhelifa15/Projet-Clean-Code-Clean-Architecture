@@ -1,24 +1,31 @@
 version: '3.8'
 
 services:
-
-  # Service MongoDB
   mongodb:
-    image: mongo
+    image: mongo:latest
+    container_name: mongodb
     restart: always
     ports:
-      - 27017:27017
+      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE: triumphMotorcyclesDb
+    volumes:
+      - mongo_data:/data/db
     networks:
       - app-network
+    healthcheck:
+      test: mongosh --eval 'db.runCommand("ping").ok' --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
-  # Service MySQL
   mysql:
     image: mysql:latest
     container_name: mysql
+    restart: always
     ports:
       - "3306:3306"
     environment:
@@ -28,8 +35,13 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
-  # Service REST API (connecté à MySQL)
   rest_api:
     image: node:23
     container_name: rest_api
@@ -43,16 +55,24 @@ services:
       - DB_NAME=triumphMotorcyclesDb
       - DB_USER=root
       - DB_PASSWORD=rootpassword
+      - MONGODB_URI=mongodb://root:example@mongodb:27017/triumphMotorcyclesDb?authSource=admin
     volumes:
-      - .:/usr/src/app
-    command: sh -c "cd infrastructure/frameworks/express && yarn install && yarn start"
+      - .:/usr/src/app:delegated
+      - /usr/src/app/node_modules
+    command: >
+      sh -c "yarn global add wait-port &&
+             wait-port mongodb:27017 -t 60000 &&
+             wait-port mysql:3306 -t 60000 &&
+             cd infrastructure/frameworks/express &&
+             yarn install &&
+             yarn dev"
     depends_on:
+      - mongodb
       - mysql
-    restart: on-failure
     networks:
       - app-network
+    restart: unless-stopped
 
-  # Service GraphQL API (connecté à MongoDB)
   graphql_api:
     image: node:23
     container_name: graphql_api
@@ -60,27 +80,34 @@ services:
     ports:
       - "4000:4000"
     environment:
+      - NODE_ENV=development
       - HOST=0.0.0.0
       - MONGO_URL=mongodb://root:example@mongodb:27017/triumphMotorcyclesDb?authSource=admin
     volumes:
-      - .:/usr/src/app
-    command: sh -c "cd infrastructure/frameworks/fastify && yarn install && yarn start"
+      - .:/usr/src/app:delegated
+      - /usr/src/app/node_modules
+    command: >
+      sh -c "yarn global add wait-port &&
+             wait-port mongodb:27017 -t 60000 &&
+             cd infrastructure/frameworks/fastify &&
+             yarn install &&
+             yarn start"
     depends_on:
       - mongodb
-    restart: on-failure
     networks:
       - app-network
+    restart: unless-stopped
 
-
-  # Service PhpMyAdmin (pour gérer MySQL)
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin
+    restart: always
     ports:
       - "8080:80"
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: rootpassword
     depends_on:
       - mysql
     networks:
@@ -97,7 +124,15 @@ services:
       - rest_api
       - graphql_api
     volumes:
-      - ./infrastructure/frameworks/react-app:/app
+      - ./infrastructure/frameworks/react-app:/app:delegated
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - WDS_SOCKET_HOST=localhost
+      - WATCHPACK_POLLING_INTERVAL=1000
+      - FAST_REFRESH=true
+      - NODE_ENV=development
     command: sh -c "yarn install && yarn dev --host"
     networks:
       - app-network
