@@ -51,11 +51,12 @@ const ServiceBook = () => {
       mileage: maintenance.motorcycle.mileage,
     },
     pieces: maintenance.maintenanceUsedParts.map((part: any) => ({
-      name: part.part.name,
+      name: part.name,
       price: parseFloat(part.unit_price),
       quantity: part.quantity,
     })),
-    totalPrice: parseFloat(maintenance.total_cost),    
+    totalPrice: parseFloat(maintenance.total_cost), 
+    recommendation: maintenance.recommendations,
   }));
 console.log("formattedData",formattedData);
 
