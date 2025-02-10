@@ -50,13 +50,18 @@ const MaintenanceCard: React.FC<MaintenanceCardProps> = ({ date, pieces, totalPr
       
       // Liste des pièces
       pieces.forEach((piece) => {
+
+        const name = piece.name || "N/A"; 
+        const price = isNaN(piece.price) ? "0.00" : piece.price.toFixed(2) + " €";
+        const quantity = isNaN(piece.quantity) ? "0" : piece.quantity.toString();
+        const total = isNaN(totalPrice) ? "0.00 €" : totalPrice.toFixed(2) + " €";
         yPos += 10;
         const totalPiece = piece.price * piece.quantity;
         
-        doc.text(piece.name, 14, yPos);
-        doc.text(`${piece.price.toFixed(2)} €`, 80, yPos);
-        doc.text(piece.quantity.toString(), 120, yPos);
-        doc.text(`${totalPiece.toFixed(2)} €`, 160, yPos);
+        doc.text(name, 14, yPos);
+        doc.text(price, 80, yPos);
+        doc.text(quantity.toString(), 120, yPos);
+        doc.text(total, 160, yPos);
       });
       
       // Ligne avant le total
